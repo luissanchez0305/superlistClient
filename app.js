@@ -2,7 +2,7 @@
  * @author LuisRicardo
  */
 
-var lugar = 1;
+var lugar = 3;
 var baseUrl = 'http://superlist.esferasoluciones.com';
 
 function modifyQuantity(productId, quantity){
