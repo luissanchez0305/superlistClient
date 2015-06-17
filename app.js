@@ -164,6 +164,7 @@ function getPictureFromCamera(){
 
     function onFail(message) {
         $('#currentState').html('Failed to get an image');
+        $('#camera-image').attr('src','');
     }   
 }
 
@@ -184,6 +185,7 @@ function getPictureFromGallery(){
 
     function onFail(message) {
         $('#currentState').html('Failed to get an image');
+        $('#camera-image').attr('src','');
     }    
 }
 
@@ -200,10 +202,10 @@ function uploadImage(imageURI) {
 
     ft.upload(imageURI, baseUrl + "/controllers/upload.php",
         function (e) {
-            alert('Uploaded');
+            $('#currentState').html('Uploaded');
         },
         function (e) {
-            alert("Upload failed");
+            $('#currentState').html("Upload failed");
         }
     , options);
 }
