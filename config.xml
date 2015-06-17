@@ -67,6 +67,12 @@
     <preference name="permissions" value="none"/>
     <feature name="http://api.phonegap.com/1.0/network"/>
     <feature name="http://api.phonegap.com/1.0/file"/>
+    <feature name="Camera">
+    	<param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+	</feature>
+	<feature name="Camera">
+		<param name="ios-package" value="CDVCamera" />
+	</feature>
     <!--
         <access origin="http://phonegap.com" />                    - allow any secure requests to http://phonegap.com/
         <access origin="http://phonegap.com" subdomains="true" />  - same as above, but including subdomains, such as http://build.phonegap.com/

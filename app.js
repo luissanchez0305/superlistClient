@@ -126,7 +126,6 @@ function getPictureFromCamera(){
     function onFail(message) {
         alert('Failed to get an image');
     }   
-    return false; 
 }
 
 function getPictureFromGallery(){
@@ -140,7 +139,6 @@ function getPictureFromGallery(){
     function onFail(message) {
         alert('Failed to get an image');
     }    
-    return false; 
 }
 
 function uploadImage(imageURI) {
