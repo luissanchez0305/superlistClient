@@ -19,6 +19,7 @@
     <!-- Core plugins -->
     <gap:plugin name="com.phonegap.plugins.barcodescanner"/>
     <gap:plugin name="org.apache.cordova.camera" />
+    <gap:plugin name="org.apache.cordova.file-transfer" />
 
     <!-- Customize your app and platform with the preference element. -->
     <preference name="phonegap-version" value="3.7.0" />          <!-- all: current version of PhoneGap -->
