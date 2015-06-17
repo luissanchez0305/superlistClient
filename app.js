@@ -117,8 +117,14 @@ function chooseMarca(obj){
 
 function getPictureFromCamera(){
 	$('#currentState').html('getPictureFromCamera');
-    navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType:Camera.DestinationType.FILE_URI }); 
 
+	try {
+    	navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType:Camera.DestinationType.FILE_URI });
+	}
+	catch(err) {
+	    $('#currentState').html('getPictureFromCamera navigator.camera ' + err.message);
+	}
+	
     function onSuccess(imageURI) {
         $('#camera-image').css({'background-image': 'url('+imageURI+')', 'background-size':  '100%'});
         uploadImage(imageURI);
@@ -131,7 +137,12 @@ function getPictureFromCamera(){
 
 function getPictureFromGallery(){
 	$('#currentState').html('getPictureFromGallery');
-    navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY }); 
+	try {
+    	navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY });
+	}
+	catch(err) {
+	    $('#currentState').html('getPictureFromGallery navigator.camera ' + err.message);
+	}
 	
     function onSuccess(imageURI) {            
         $('#camera-image').css({'background-image': 'url('+imageURI+')', 'background-size':  '50%'});
