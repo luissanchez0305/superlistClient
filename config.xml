@@ -19,9 +19,11 @@
     <!-- Core plugins -->
     <gap:plugin name="com.phonegap.plugins.barcodescanner"/>
     <gap:plugin name="org.apache.cordova.camera" />
+    <gap:plugin name="org.apache.cordova.file"/>
     <gap:plugin name="org.apache.cordova.file-transfer" />
 
     <!-- Customize your app and platform with the preference element. -->
+    <preference name="permissions" value="none"/>
     <preference name="phonegap-version" value="3.7.0" />          <!-- all: current version of PhoneGap -->
     <preference name="orientation"      value="default" />
     <preference name="target-device"    value="universal" />
@@ -66,11 +68,16 @@
         Otherwise, you can specify specific domains:
     -->
     <access origin="*"/>  <!-- allow local pages -->
-    <preference name="permissions" value="none"/>
     <feature name="http://api.phonegap.com/1.0/network"/>
     <feature name="http://api.phonegap.com/1.0/file"/>
     <feature name="Camera">
     	<param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+	</feature>
+	<feature name="File">
+	   <param name="android-package" value="org.apache.cordova.FileUtils" />
+	</feature>
+	<feature name="FileTransfer">
+	   <param name="android-package" value="org.apache.cordova.FileTransfer" />
 	</feature>
 	<feature name="Camera">
 		<param name="ios-package" value="CDVCamera" />
