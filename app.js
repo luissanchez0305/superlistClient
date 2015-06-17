@@ -32,6 +32,7 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+
 var lugar = 3;
 var baseUrl = 'http://superlist.esferasoluciones.com';
 
@@ -156,7 +157,8 @@ function getPictureFromCamera(){
 	}
 	
     function onSuccess(imageURI) {
-        $('#camera-image').css({'background-image': 'url('+imageURI+')', 'background-size':  '100%'});
+        $('#camera-image').attr('src',imageURI);
+        $('#currentState').html(imageURI);
         uploadImage(imageURI);
     }
 
@@ -175,7 +177,8 @@ function getPictureFromGallery(){
 	}
 	
     function onSuccess(imageURI) {            
-        $('#camera-image').css({'background-image': 'url('+imageURI+')', 'background-size':  '50%'});
+        $('#camera-image').attr('src',imageURI);
+        $('#currentState').html(imageURI);
         uploadImage(imageURI);
     }
 
