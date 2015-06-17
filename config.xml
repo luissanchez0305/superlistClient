@@ -18,13 +18,14 @@
 
     <!-- Core plugins -->
     <gap:plugin name="com.phonegap.plugins.barcodescanner"/>
+    <gap:plugin name="org.apache.cordova.camera" />
 
     <!-- Customize your app and platform with the preference element. -->
     <preference name="phonegap-version" value="3.7.0" />          <!-- all: current version of PhoneGap -->
     <preference name="orientation"      value="default" />
     <preference name="target-device"    value="universal" />
-    <preference name="fullscreen"       value="false" />
-    <preference name="webviewbounce"    value="false" />
+    <preference name="fullscreen"       value="true" />
+    <preference name="webviewbounce"    value="true" />
     <!-- Plugins -->
 
     <!-- Define app icon for each platform. -->

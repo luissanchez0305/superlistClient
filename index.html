@@ -202,7 +202,7 @@
 		<input type="hidden" id="productId"/>
 		<div data-role="header" data-position="inline" data-position="fixed">
 			<div class="ui-btn-icon-left ui-icon-arrow-l" href="#products" onclick="location.href='#products';" data-id="" id="backToProducts"></div>
-			<h4>Super List - <label id="productName"></label> <label id="currentState"></label></h4>
+			<h4>Super List - <label id="productName"></label></h4>
 			<a href="#right-panel-product" class="ui-btn ui-shadow ui-corner-all ui-btn-right ui-icon-menu ui-btn-icon-notext menuPanel" data-iconpos="notext">Menu</a>			
 		</div>
 		<div data-role="content" data-theme="a">
@@ -228,6 +228,7 @@
 								<li>
 									<button onclick="getPictureFromCamera();">Camera</button> <br>
 									<button onclick="getPictureFromGallery();">Gallery</button> <br>	
+									<label id="currentState"></label>
 									<img id="camera-image" width="250" height="250"/>							  
 								</li>
 							  </ul>
@@ -300,7 +301,7 @@
 	</div>
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>	
-	<script src="phonegap.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
 	<script src="app.js"></script>
 	<script type="text/javascript">		
 		$(document).ready(function(){
