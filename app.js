@@ -160,7 +160,7 @@ function getPictureFromCamera(){
         $('#camera-image').attr('src',imageURI);
         $('#currentState').html(imageURI);
         try {    		
-        	uploadImage(imageURI);
+        	$('#imageName').val(uploadImage(imageURI));
         }
 		catch(err) {
 		    $('#currentState').html('getPictureFromCamera upload ' + err.message);
@@ -186,7 +186,7 @@ function getPictureFromGallery(){
         $('#camera-image').attr('src',imageURI);
         $('#currentState').html(imageURI);
         try {    		
-        	uploadImage(imageURI);
+        	$('#imageName').val(uploadImage(imageURI));
         }
 		catch(err) {
 		    $('#currentState').html('getPictureFromGallery upload ' + err.message);
@@ -213,6 +213,7 @@ function uploadImage(imageURI) {
     ft.upload(imageURI, baseUrl + "/controllers/upload.php",
         function (e) {
             $('#currentState').html('Uploaded - ' + ' - ' + e.response + ' - ' + e.responseCode + ' - '+ e.bytesSent);
+            return e.response;
         },
         function (e) {
             $('#currentState').html('Upload failed - ' + e.source + ' - ' + e.code + ' - ' + e.target);

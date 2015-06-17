@@ -229,21 +229,22 @@
 									<button onclick="getPictureFromCamera();">Camera</button> <br>
 									<button onclick="getPictureFromGallery();">Gallery</button> <br>	
 									<!--<label id="currentState"></label>-->
-									<img id="camera-image" width="250" height="250"/>							  
+									<img id="camera-image" width="250" height="250"/>	
 								</li>
 							  </ul>
 						  </div>
 						</div>
 						<form id="addProductForm">
-						<h2>
-							<input type="text" id="addProductName" name="addProductName" placeholder="Nombre"/>
-							<ul id="brandNameAutocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Marca" data-filter-theme="a"></ul>
-							<input type="hidden" id="addBrandName" name="addBrandName" />
-						</h2>
-						<div>
-							<input type="submit" id="addProductButton" value="Agregar"/>
-							<input type="button" id="cancelProductButton" value="Cancelar"/>
-						</div>
+							<input type="hidden" id="imageName" name="imageName" />
+							<h2>
+								<input type="text" id="addProductName" name="addProductName" placeholder="Nombre"/>
+								<ul id="brandNameAutocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Marca" data-filter-theme="a"></ul>
+								<input type="hidden" id="addBrandName" name="addBrandName" />
+							</h2>
+							<div>
+								<input type="submit" id="addProductButton" value="Agregar"/>
+								<input type="button" id="cancelProductButton" value="Cancelar"/>
+							</div>
 						</form>
 					</div>
 					<div class="work-in">
