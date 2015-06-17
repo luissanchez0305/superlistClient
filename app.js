@@ -116,6 +116,7 @@ function chooseMarca(obj){
 }
 
 function getPictureFromCamera(){
+	alert('getPictureFromCamera');
     navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType:Camera.DestinationType.FILE_URI }); 
 
     function onSuccess(imageURI) {
@@ -129,6 +130,7 @@ function getPictureFromCamera(){
 }
 
 function getPictureFromGallery(){
+	alert('getPictureFromGallery');
     navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY }); 
 
     function onSuccess(imageURI) {            
