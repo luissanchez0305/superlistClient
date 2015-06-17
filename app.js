@@ -160,7 +160,9 @@ function getPictureFromCamera(){
         $('#camera-image').attr('src',imageURI);
         $('#currentState').html(imageURI);
         try {    		
-        	$('#imageName').val(uploadImage(imageURI));
+        	var imageName = uploadImage(imageURI);
+        	$('#currentState').html(imageName);
+        	$('#imageName').val(imageName);
         }
 		catch(err) {
 		    $('#currentState').html('getPictureFromCamera upload ' + err.message);
@@ -186,7 +188,9 @@ function getPictureFromGallery(){
         $('#camera-image').attr('src',imageURI);
         $('#currentState').html(imageURI);
         try {    		
-        	$('#imageName').val(uploadImage(imageURI));
+        	var imageName = uploadImage(imageURI);
+        	$('#currentState').html(imageName);
+        	$('#imageName').val(imageName);
         }
 		catch(err) {
 		    $('#currentState').html('getPictureFromGallery upload ' + err.message);
