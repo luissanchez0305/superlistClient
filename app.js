@@ -116,7 +116,7 @@ function chooseMarca(obj){
 }
 
 function getPictureFromCamera(){
-	alert('getPictureFromCamera');
+	$('#currentState').html('getPictureFromCamera');
     navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType:Camera.DestinationType.FILE_URI }); 
 
     function onSuccess(imageURI) {
@@ -125,21 +125,21 @@ function getPictureFromCamera(){
     }
 
     function onFail(message) {
-        alert('Failed to get an image');
+        $('#currentState').html('Failed to get an image');
     }   
 }
 
 function getPictureFromGallery(){
-	alert('getPictureFromGallery');
+	$('#currentState').html('getPictureFromGallery');
     navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY }); 
-
+	
     function onSuccess(imageURI) {            
         $('#camera-image').css({'background-image': 'url('+imageURI+')', 'background-size':  '50%'});
         uploadImage(imageURI);
     }
 
     function onFail(message) {
-        alert('Failed to get an image');
+        $('#currentState').html('Failed to get an image');
     }    
 }
 
