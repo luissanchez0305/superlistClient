@@ -159,7 +159,12 @@ function getPictureFromCamera(){
     function onSuccess(imageURI) {
         $('#camera-image').attr('src',imageURI);
         $('#currentState').html(imageURI);
-        uploadImage(imageURI);
+        try {    		
+        	uploadImage(imageURI);
+        }
+		catch(err) {
+		    $('#currentState').html('getPictureFromCamera upload ' + err.message);
+		}
     }
 
     function onFail(message) {
@@ -180,7 +185,12 @@ function getPictureFromGallery(){
     function onSuccess(imageURI) {            
         $('#camera-image').attr('src',imageURI);
         $('#currentState').html(imageURI);
-        uploadImage(imageURI);
+        try {    		
+        	uploadImage(imageURI);
+        }
+		catch(err) {
+		    $('#currentState').html('getPictureFromGallery upload ' + err.message);
+		}
     }
 
     function onFail(message) {
