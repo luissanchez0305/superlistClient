@@ -212,10 +212,10 @@ function uploadImage(imageURI) {
 
     ft.upload(imageURI, baseUrl + "/controllers/upload.php",
         function (e) {
-            $('#currentState').html('Uploaded');
+            $('#currentState').html('Uploaded - ' + e);
         },
         function (e) {
-            $('#currentState').html("Upload failed");
+            $('#currentState').html("Upload failed - " + e);
         }
     , options);
 }
