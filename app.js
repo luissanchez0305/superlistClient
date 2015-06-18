@@ -147,8 +147,6 @@ function chooseMarca(obj){
 }
 
 function getPictureFromCamera(){
-	$('#currentState').html('getPictureFromCamera');
-
 	try {
     	navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType:Camera.DestinationType.FILE_URI });
 	}
@@ -176,7 +174,6 @@ function getPictureFromCamera(){
 }
 
 function getPictureFromGallery(){
-	$('#currentState').html('getPictureFromGallery');
 	try {
     	navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY });
 	}
@@ -216,7 +213,7 @@ function uploadImage(imageURI) {
 
     ft.upload(imageURI, baseUrl + "/controllers/upload.php",
         function (e) {
-            $('#currentState').html('Uploaded - ' + ' - ' + e.response + ' - ' + e.responseCode + ' - '+ e.bytesSent);
+            //$('#currentState').html('Uploaded - ' + ' - ' + e.response + ' - ' + e.responseCode + ' - '+ e.bytesSent);
             return e.response;
         },
         function (e) {
