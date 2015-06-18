@@ -214,7 +214,7 @@ function uploadImage(imageURI) {
     ft.upload(imageURI, baseUrl + "/controllers/upload.php",
         function (e) {
             //$('#currentState').html('Uploaded - ' + ' - ' + e.response + ' - ' + e.responseCode + ' - '+ e.bytesSent);
-            return e.response;
+            $('#currentState').html(e.response);
         },
         function (e) {
             $('#currentState').html('Upload failed - ' + e.source + ' - ' + e.code + ' - ' + e.target);
