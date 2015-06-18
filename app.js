@@ -167,7 +167,7 @@ function getPictureFromCamera(){
 		catch(err) {
 		    $('#currentState').html('getPictureFromCamera upload ' + err.message);
 		}
-    }
+    } 
 
     function onFail(message) {
         $('#currentState').html('Failed to get an image');
