@@ -142,7 +142,7 @@ function buyList(){
 function chooseMarca(obj){
 	var $this = $(obj);
 	$('#addBrandName').val($this.attr('data-id'));
-	$('#addProductForm').find('input[data-type="search"]').val($this.html());
+	$('#product').find('input[data-type="search"]').val($this.html());
 	$('#brandNameAutocomplete').html('');
 }
 
@@ -219,7 +219,7 @@ function sendProduct(_name, _trademark, _category, _image){
 		    $('#backToProducts').click();
     	},
 		error: function(xhr, status, error){
-			alert('buy: ' + status + ' ' + error);
+			alert('sendProduct: ' + status + ' ' + error);
 		}
     });
 }
