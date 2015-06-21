@@ -196,7 +196,7 @@ function addProduct(_name, _trademark, _category, _image){
 	
 	    ft.upload(image, baseUrl + "/controllers/upload.php",
 	        function (e) {
-	        	console.log('Uploaded');
+	        	$('#currentState').html('Uploaded');
 	        	sendProduct(_name, _trademark, _category, e.response);
 	        },
 	        function (e) {
