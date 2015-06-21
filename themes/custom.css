@@ -1,0 +1,141 @@
+			.hide{
+				display:none;
+			}
+			.menuPanel{
+				border-color: transparent;
+			}
+			.ui-li-static.ui-collapsible > .ui-collapsible-heading {
+		        margin: 0;
+		    }
+		
+		    .ui-li-static.ui-collapsible {
+		        padding: 0;
+		    }
+		
+		    .ui-li-static.ui-collapsible > .ui-collapsible-heading > .ui-btn {
+		        border-top-width: 0;
+		    }
+		
+		    .ui-li-static.ui-collapsible > .ui-collapsible-heading.ui-collapsible-heading-collapsed > .ui-btn,
+		    .ui-li-static.ui-collapsible > .ui-collapsible-content {
+		        border-bottom-width: 0;
+		    }
+		    @media ( min-width: 35em ) {
+
+				/* wrap on wide viewports once open */
+			
+				.ui-panel-page-content-open.ui-panel-page-content-position-left {
+					margin-right: 17em;
+				}
+				.ui-panel-page-content-open.ui-panel-page-content-position-right {
+					margin-left: 17em;
+				}
+				.ui-panel-page-content-open {
+					width: auto;
+				}
+			
+				/* disable "dismiss" on wide viewports */
+				.ui-panel-dismiss {
+					display: none;
+				}
+			
+				/* same as the above but for panels with display mode "push" only */
+			
+				.ui-panel-page-content-open.ui-panel-page-content-position-left.ui-panel-page-content-display-push {
+					margin-right: 17em;
+				}
+				.ui-panel-page-content-open.ui-panel-page-content-position-right.ui-panel-page-content-display-push {
+					margin-left: 17em;
+				}
+				.ui-panel-page-content-open.ui-panel-page-content-display-push {
+					width: auto;
+				}
+			
+				.ui-panel-dismiss-display-push {
+					display: none;
+				}
+			}
+			#items {
+				width: 100%;
+			}
+			#items > li p.header{
+				font-size: 220%;
+				font-weight: bold;
+			}
+			#items > li p.quantity{
+				font-size: 140%;
+				font-weight: 30px;
+			}
+			#items > li p.status{
+				font-size: 200%;
+				font-weight: bold;
+			}
+			#items > li p.status.red{
+				color: #f00;
+			}
+			#items > li p.status.green{
+				color: #0f0;
+			}
+			/* 16px 41px */
+			#index .ui-header {
+			  height: 41px;   
+			  padding: 0;
+			}
+			#index .ui-header h1 {
+			  font-size: 2em;   
+			  padding: 0;
+			}
+			.ui-icon-money:after {
+				background-image: url('images/mobile_pay-512.png');
+				/* Make your icon fit */
+				background-size: 18px 18px;
+			}
+			.ui-icon-menu:after {
+				background-image: url('images/menu_icon2.png');
+				/* Make your icon fit */
+				background-size: 18px 18px;
+			}
+			.ui-icon-reload:after {
+				background-image: url('images/reload.png');
+				/* Make your icon fit */
+				background-size: 18px 18px;
+			}
+
+			.ui-content {
+    			padding: 0px;
+			}
+			.categoryName{
+				position: relative;
+				top: -45px;
+				height: 45px;
+				background-color: rgba(255, 255, 255, 0.8);
+				text-align: center;
+				padding-top: 9px;
+			}
+			.valueControllers{
+				color: #0f0f0f; 
+				position: relative; 
+				top: -50px; 
+				height: 45px; 
+				background-color:rgba(255, 255, 255, 0.8);
+			}
+			.valueControllers.product{				
+				color: #0f0f0f; 
+				background-color:rgba(255, 255, 255, 0.8);
+				top: 0px; 
+				margin-left: 50px;
+				padding-top: 10px;
+			}
+			.ui-mobile label {
+				display: inline;
+			}
+			.ui-icon-menu2:after {
+				background-image: url('images/menu_icons.png') 0 -484px;
+				width: 66px;
+				height: 58px;
+				/* Make your icon fit */
+				background-size: 18px 18px;
+			}		
+			.ui-filter-inset {
+			    margin-top: 0;
+			}	
