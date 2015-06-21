@@ -184,7 +184,6 @@ function getPictureFromGallery(){
 
 function addProduct(_name, _trademark, _category, _image){
 	if(_image.length > 0){
-	    $('#currentState').html('Uploading');
 		var ft = new FileTransfer(), options = new FileUploadOptions();
 	
 	    options.fileKey = "file";
@@ -194,6 +193,7 @@ function addProduct(_name, _trademark, _category, _image){
 	    options.params = { // Whatever you populate options.params with, will be available in req.body at the server-side.
 	        "description": "Uploaded from my phone"
 	    };
+	    $('#currentState').html('Uploading');
 	
 	    ft.upload(image, baseUrl + "/controllers/upload.php",
 	        function (e) {
