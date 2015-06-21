@@ -184,6 +184,7 @@ function getPictureFromGallery(){
 
 function addProduct(_name, _trademark, _category, _image){
 	if(_image.length > 0){
+	    $('#currentState').html('Uploading');
 		var ft = new FileTransfer(), options = new FileUploadOptions();
 	
 	    options.fileKey = "file";
