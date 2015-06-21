@@ -1377,9 +1377,6 @@ ul.date li i {
 .content-grid {
   width: 33.333%;
 }
-.content-grid:nth-child(4){
-  display:none;
-}
 ul.social-in li:nth-child(7){
   display:none;
 }
