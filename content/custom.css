@@ -20,7 +20,7 @@
 		    .ui-li-static.ui-collapsible > .ui-collapsible-content {
 		        border-bottom-width: 0;
 		    }
-		    #categoryName{
+		    #categoryName, #productName{
 		    	width: 50%;
   				display: inline;
 		    }
