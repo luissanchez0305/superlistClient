@@ -66,7 +66,7 @@ function loadList($items){
 					$items.append(				
 						'<li data-id="'+producto.id+'" data-status="buy">'+
 							'<div style="width: 20%; float:left; margin-right: 5%;">'+
-								'<img src="images/'+producto.imagen+'" style="width: 100%;"/>'+
+								'<img src="'+baseUrl+producto.imagen+'" style="width: 100%;"/>'+
 							'</div>'+
 							'<div class="textContainer" style="width: 65%; float:left;">'+
 								'<p class="header">'+producto.nombre+'</p>'+

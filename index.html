@@ -282,7 +282,7 @@
 								$('#products .content').append(
 									'<div class="content-grid">'+
 										'<a href="#product" class="b-link-stripe b-animate-go thickbox" data-id="'+producto.id+'">'+
-											'<img  src="'+baseUrl+'/uploads/'+producto.imagen+'" style="width:74%;height:74%; display:block; margin: auto;"/>'+
+											'<img  src="'+baseUrl+producto.imagen+'" style="width:74%;height:74%; display:block; margin: auto;"/>'+
 										'</a>'+
 										'<div class="valueControllers">'+
 											'<label style="padding-top:11px; padding-left: 5px; float:left; font-weight: bold; color: #3388cc;">'+producto.nombre + ' - ' + producto.marcaNombre +'</label>'+
@@ -323,7 +323,7 @@
 							$('#lastQty').html('');
 							$('#productQty').html('');
 							
-							$('#productImage').attr('src', baseUrl+'/uploads/' + data.imagen);
+							$('#productImage').attr('src', baseUrl + data.imagen);
 							$('#productBrand').html(data.marca);
 							if(data.ultimaFecha){
 								$('#lastDate').html('Fue el ' + data.ultimaFecha);
@@ -348,6 +348,7 @@
 					$('#product .work-top.work-add').show();
 					$('#product .work-in').hide();					
         			$('#camera-image').attr('src','');
+        			$('#currentState').html('');
 				}
 					
 			}
