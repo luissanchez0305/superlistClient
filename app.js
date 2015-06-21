@@ -194,7 +194,7 @@ function addProduct(_name, _trademark, _category, _image){
 	        "description": "Uploaded from my phone"
 	    };
 	    $('#currentState').html('Uploading');
-	
+		try{
 	    ft.upload(image, baseUrl + "/controllers/upload.php",
 	        function (e) {
 	        	$('#currentState').html('Uploaded');
@@ -204,6 +204,10 @@ function addProduct(_name, _trademark, _category, _image){
 	            $('#currentState').html('Upload failed - ' + e.source + ' - ' + e.code + ' - ' + e.target);
 	        }
 	    , options);
+	   }
+		catch(err) {
+		    $('#currentState').html('uploadImage ft.upload ' + err.message);
+		}
    	}
    	else
    		sendProduct(_name, _trademark, _category);
