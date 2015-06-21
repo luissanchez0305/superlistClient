@@ -195,7 +195,7 @@ function addProduct(_name, _trademark, _category, _image){
 	    };
 	    $('#currentState').html('Uploading');
 		try{
-	    ft.upload(image, baseUrl + "/controllers/upload.php",
+	    ft.upload(_image, baseUrl + "/controllers/upload.php",
 	        function (e) {
 	        	$('#currentState').html('Uploaded');
 	        	sendProduct(_name, _trademark, _category, e.response);
