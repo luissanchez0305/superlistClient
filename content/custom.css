@@ -148,3 +148,11 @@
 			.ui-filter-inset {
 			    margin-top: 0;
 			}	
+			#signupForm label.error {
+			  color:#FB3A3A;
+			  font-weight:bold;
+			  display: block;
+			  float: right;
+			  padding-right: 10px;
+			  font-size: 13px;
+			}

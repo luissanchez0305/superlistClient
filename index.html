@@ -38,20 +38,27 @@
 			<h1>Super List</h1>
 			<a href="#signin" class="ui-btn ui-shadow ui-corner-all ui-btn-left ui-icon-arrow-l ui-btn-icon-notext" data-iconpos="notext">Signup</a>
 		</div>
-		<div data-role="content" data-theme="a">				
-			<div data-role="fieldcontain">
-				<label for="name">Nombre:</label>
-				<input type="text" name="registerName" id="registerName" value=""  />
-			</div>					
-			<div data-role="fieldcontain">
-				<label for="name">Email:</label>
-				<input type="text" name="registerEmail" id="registerEmail" value=""  />
-			</div>			
-			<div data-role="fieldcontain">
-				<label for="name">Contraseña:</label>
-				<input type="password" name="registerPassword" id="registerPassword" value=""  />
-			</div>		
+		<div data-role="content" data-theme="a">	
+			<form id="signupForm">			
+				<div data-role="fieldcontain">
+					<label for="name">Nombre:</label>
+					<input type="text" name="registerName" id="registerName" value=""  />
+				</div>					
+				<div data-role="fieldcontain">
+					<label for="name">Apellido:</label>
+					<input type="text" name="registerLastname" id="registerLastname" value=""  />
+				</div>					
+				<div data-role="fieldcontain">
+					<label for="name">Email:</label>
+					<input type="text" name="registerEmail" id="registerEmail" value=""  />
+				</div>			
+				<div data-role="fieldcontain">
+					<label for="name">Contraseña:</label>
+					<input type="password" name="registerPassword" id="registerPassword" value=""  />
+				</div>	
+			</form>	
 			<a href="#" data-role="button" id="signupBtn" data-theme="f">Registrarse</a>	
+			<a href="#" style="display:none;" data-role="button" id="signupBtnValidated" data-theme="f">Registrarse</a>	
 			<a href="#" data-role="button" data-theme="d" data-icon="check" onclick="navigator.app.backHistory();">Ingresar</a>
 			<div id="registerloading" style="width: 100%; display:none;"><img width="50" height="50" src="images/ajax-loader1.gif" /></div>	
 		</div>
@@ -208,6 +215,7 @@
     <script type="text/javascript" src="cordova.js"></script>
 	<script type="text/javascript" src="config.js"></script>
 	<script type="text/javascript" src="app.js"></script>
+	<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
 	<script type="text/javascript">		
         app.initialize();
 		$(document).ready(function(){		  
@@ -281,6 +289,28 @@
 		    		$('#backToProducts').attr('data-id'), 
 		    		$('#camera-image').attr('src'));
 		    });	
+		    
+			    $("#signupForm").validate({
+			        // Specify the validation rules
+			        rules: {
+			            registerName: "required",
+			            registerLastname: "required",
+			            email: "required",
+			            password: "required"
+			        },
+			        
+			        // Specify the validation error messages
+			        messages: {
+			        	registerName: "Por favor introduzca un nombre",
+			            registerLastname: "Por favor introduzca un apellido",
+			            email: "Por favor introduzca un email",
+			            password: "Por favor introduzca un password"
+			        },
+			        
+			        submitHandler: function(form){
+			        	$('#signupBtnValidated').click()
+				}
+			});
 		});
 		
 		// Agregar producto a la lista

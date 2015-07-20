@@ -13,7 +13,9 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.getElementById('signinBtn').addEventListener('click', this.signin, false);
-        document.getElementById('signupBtn').addEventListener('click', this.signup, false);
+        document.getElementById('signupBtnValidated').addEventListener('click', this.signup, false);
+        
+        document.addEventListener("backbutton", this.backButtonClicked, false);
     },
     // deviceready Event Handler
     //
@@ -40,8 +42,8 @@ var app = {
         else{
 			$('#signinloading').show();
 			$.ajax({
-				url: baseUrl + '/userExists.php',
-				data: {e: value},
+				url: baseUrl + '/user.php',
+				data: {e: value, type: 'exists'},
 				success: function(data){
 					$.mobile.changePage("#index");   
 					$('#signinloading').hide();
@@ -52,6 +54,27 @@ var app = {
 			});          	
         }         
     },
+    backButtonClicked: function(e){
+        if($.mobile.activePage.is('#products'))
+	    	$.mobile.changePage("#index");
+        else if($.mobile.activePage.is('#product'))
+        	$('#backToProducts').click();
+        else if($.mobile.activePage.is("#signup"))
+  		  	$.mobile.changePage("#signin");   
+        else if($.mobile.activePage.is('#index'))
+        	navigator.app.exitApp();
+        else if($.mobile.activePage.is('#list')){
+	        navigator.notification.confirm(
+		        'Desea salir?!',  // message
+		        onConfirm,              // callback to invoke with index of button pressed
+		        'Super list',            // title
+		        'Volver,Salir'          // buttonLabels
+	    	);	
+        }
+        else
+            navigator.app.backHistory();     
+        		
+    },
     signin: function(){
     	$('#signinloading').show();
     	var email = $('#signinEmail').val();
@@ -59,13 +82,13 @@ var app = {
     	
     	//Revisar credenciales desde webservice
     	$.ajax({
-    	  url: baseUrl + '/cred.php',
-    	  data: {e: email, p: passd},
+    	  url: baseUrl + '/user.php',
+    	  data: {e: email, p: passd, type: 'cred'},
     	  success: function(data){
-    		if(data.posts.length > 0){
+    		if(data > 0){
 	        	$.mobile.changePage("#index");
     	        window.localStorage["superlist_user"] = email;
-    	        window.localStorage["superlist_userid"] = data.posts[0].post.id;
+    	        window.localStorage["superlist_userid"] = data;
     			$('#signinEmail').val('');
     	    	$('#signinPassword').val('');
     		}
@@ -81,40 +104,48 @@ var app = {
     	var email = $('#registerEmail').val();
     	var passd = $('#registerPassword').val();
     	var name = $('#registerName').val();
+    	var lastname = $('#registerLastname').val();
 
         var value = window.localStorage["superlist_user"];
         if(typeof value === 'undefined') {
         	if(passd.length > 0 && email.length > 0 && name.length > 0){
 		    	//Revisar credenciales desde webservice
 		    	$.ajax({
-		    	  url: baseUrl + '/userExists.php',
-		    	  data: {e: email},
+		    	  url: baseUrl + '/user.php',
+		    	  data: {e: email, type: 'exists'},
 		    	  success: function(data){
-		    		if(data.posts.length > 0){
+		    		if(data.id > 0){
 		    			alert('Usuario ya existe');		
 		    		}
 		    		else {
 		    			$.ajax({
-		    				url: baseUrl + '/createUser.php',
-		    				data: {p: passd, e: email, n: name},
+		    				url: baseUrl + '/user.php',
+		    				data: {i: 0, p: passd, e: email, n: name, a: lastname, type: 'manage'},
 		    				success: function(data){
-		    	    	        window.localStorage["superlist_user"] = email;
-		    	    	        window.localStorage["superlist_userid"] = data;
-		    		        	$.mobile.changePage("#index");
-		    		        	$('#registerEmail').val('');
-		    		        	$('#registerPassword').val('');
-		    		        	$('#registerName').val('');
+		    					if(data){
+			    	    	        window.localStorage["superlist_user"] = email;
+			    	    	        window.localStorage["superlist_userid"] = data.id;
+			    		        	$.mobile.changePage("#index");
+			    		        	$('#registerEmail').val('');
+			    		        	$('#registerPassword').val('');
+			    		        	$('#registerName').val('');
+			    		        	$('#registerLastname').val('');
+		    		        	}
+		    		        	else{
+		    		        		
+		    		        	}
 		    				}
 		    			});
 		    		}
 		    		$('#registerloading').hide();
-		    	  	},
+		    	  },
 		    	  dataType: 'json'
 		    	});
         	}
         	else {
         		alert('Introduce todas las opciones');
-        	}    	
+        	}   
+        } 	
     }
 };
 
