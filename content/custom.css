@@ -90,17 +90,22 @@
 			  padding: 0;
 			}
 			.ui-icon-money:after {
-				background-image: url('images/mobile_pay-512.png');
+				background-image: url('/images/mobile_pay-512.png');
 				/* Make your icon fit */
 				background-size: 18px 18px;
 			}
+			.ui-icon-adduser:after{
+				background-image: url('/images/user_add.png');
+				/* Make your icon fit */
+				background-size: 18px 18px;				
+			}
 			.ui-icon-menu:after {
-				background-image: url('images/menu_icon2.png');
+				background-image: url('/images/menu_icon2.png');
 				/* Make your icon fit */
 				background-size: 18px 18px;
 			}
 			.ui-icon-reload:after {
-				background-image: url('images/reload.png');
+				background-image: url('/images/reload.png');
 				/* Make your icon fit */
 				background-size: 18px 18px;
 			}
@@ -131,7 +136,7 @@
 				padding-top: 10px;
 			}
 			.ui-mobile label {
-				display: inline;
+				display: inline !important;
 			}
 			.ui-icon-menu2:after {
 				background-image: url('images/menu_icons.png') 0 -484px;

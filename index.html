@@ -13,6 +13,51 @@
 		<link rel="shortcut icon" href="favicon.ico">
     </head>
     <body>
+	<div data-role="page" data-theme="a" id="signin">
+		<div data-role="header" data-position="fixed">
+			<h1>Super List</h1>
+			<a href="#signup" class="ui-btn ui-shadow ui-corner-all ui-btn-right ui-icon-adduser ui-btn-icon-notext" data-iconpos="notext">Signup</a>
+		</div>
+		<div data-role="content" data-theme="a"><div data-role="fieldcontain">
+			<label for="name">Email:</label>
+			<input type="text" name="signinEmail" id="signinEmail" value=""  />
+			</div>			
+			<div data-role="fieldcontain">
+				<label for="name">Contraseña:</label>
+				<input type="password" name="signinPassword" id="signinPassword" value=""  />
+			</div>	
+			<a href="#" id="signinBtn" data-role="button" data-theme="d" data-icon="check">Ingresar</a>	
+			<a href="#signup" data-role="button" data-theme="f">Registrarse</a>	
+			<div id="signinloading" style="width: 100%; display:none;"><img width="50" height="50" src="images/ajax-loader1.gif" /></div>
+		</div>
+		<div data-role="footer" id="ftrMain" name="ftrMain" data-position="fixed">	
+		</div>
+	</div>	
+	<div data-role="page" data-theme="a" id="signup">
+		<div data-role="header" data-position="fixed">
+			<h1>Super List</h1>
+			<a href="#signin" class="ui-btn ui-shadow ui-corner-all ui-btn-left ui-icon-arrow-l ui-btn-icon-notext" data-iconpos="notext">Signup</a>
+		</div>
+		<div data-role="content" data-theme="a">				
+			<div data-role="fieldcontain">
+				<label for="name">Nombre:</label>
+				<input type="text" name="registerName" id="registerName" value=""  />
+			</div>					
+			<div data-role="fieldcontain">
+				<label for="name">Email:</label>
+				<input type="text" name="registerEmail" id="registerEmail" value=""  />
+			</div>			
+			<div data-role="fieldcontain">
+				<label for="name">Contraseña:</label>
+				<input type="password" name="registerPassword" id="registerPassword" value=""  />
+			</div>		
+			<a href="#" data-role="button" id="signupBtn" data-theme="f">Registrarse</a>	
+			<a href="#" data-role="button" data-theme="d" data-icon="check" onclick="navigator.app.backHistory();">Ingresar</a>
+			<div id="registerloading" style="width: 100%; display:none;"><img width="50" height="50" src="images/ajax-loader1.gif" /></div>	
+		</div>
+		<div data-role="footer" id="ftrMain" name="ftrMain" data-position="fixed">	
+		</div>
+	</div>		
 	<div data-role="page" data-theme="a" id="index">
 		<div data-role="header" data-position="fixed">
 			<h1>Super List</h1>
@@ -94,18 +139,19 @@
 						</div>
 						<input type="hidden" id="imageName" name="imageName" />
 						<h2>
+							<input type="hidden" id="currentAction" name="currentAction" />
 							<input type="text" id="addProductName" name="addProductName" placeholder="Nombre"/>
 							<ul id="brandNameAutocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Marca" data-filter-theme="a"></ul>
 							<input type="hidden" id="addBrandName" name="addBrandName" />
 						</h2>
 						<div>
-							<input type="button" id="addProductButton" value="Agregar"/>
+							<input type="button" id="addProductButton" value="Guardar"/>
 							<input type="button" id="cancelProductButton" value="Cancelar"/>
 						</div>
 					</div>
 					<div class="work-in">
 						<div class="info">
-						<h3 id="productBrand"></h3>
+							<h3 id="productBrand"></h3>
 							<ul class="likes">
 								<li>La ultima vez que compró <label class="productTitle"></label></li>
 								<li><span><i class="dec"> </i><label id="lastDate"></label></span></li>
@@ -117,6 +163,7 @@
 									    <a style="float:left;" class="mngQty ui-shadow ui-btn ui-corner-all ui-icon-plus ui-btn-icon-notext ui-btn-inline" data-id="0">Button</a>
 									</div>		
 								</li>
+								<a type="button" id="editProduct" action="edit" data-id="" class="ui-btn">Editar</a>
 							</ul>
 						</div>
 					</div>
@@ -159,10 +206,11 @@
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>	
     <script type="text/javascript" src="cordova.js"></script>
-	<script src="app.js"></script>
+	<script type="text/javascript" src="config.js"></script>
+	<script type="text/javascript" src="app.js"></script>
 	<script type="text/javascript">		
         app.initialize();
-		$(document).ready(function(){
+		$(document).ready(function(){		  
 			$('#popupSuccess').hide();
 			loadList($('#items'));
 			$.ajax({
@@ -196,6 +244,8 @@
 		        if ( value && value.length > 1 ) {
 		            $ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
 		            $ul.listview( "refresh" );
+					$('#product').find('input[data-type="search"]').val('0');
+		            
 		            $.ajax({
 		                url: baseUrl + "/controllers/producto.php",
 		                dataType: "json",
@@ -218,10 +268,15 @@
 		        }
 		    });	
 		    $('#cancelProductButton').click(function(){
-		    	$('#backToProducts').click();
+		    	if($('#currentAction').val() == 'agregar')
+		    		$('#backToProducts').click();
+		    	else
+		    		$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();
 		    });	
 		    $('#addProductButton').click(function(){
-		    	addProduct($('#addProductName').val(), 
+		    	addProduct($('#currentAction').val(),
+		    		$('#addProductName').val(), 
+		    		$('#product').find('input[data-type="search"]').val(),
 		    		$('#addBrandName').val(), 
 		    		$('#backToProducts').attr('data-id'), 
 		    		$('#camera-image').attr('src'));
@@ -263,9 +318,9 @@
 		});
 		
 		// Navegador maestro
-		$('body').on("click", 'a, #backToProducts', function() {
+		$('body').on("click", 'a, #backToProducts, #editProduct', function() {
 			var $this = $(this);
-			var view = $this.attr('href') ? $this.attr('href').replace('#','') : '';
+			var view = $this.attr('href') ? $this.attr('href').replace('#','') : $this.attr('action') ? $this.attr('action') : '';
 			if(view == 'products'){
 				$('#categoryName').html($this.find('.categoryName').html());
 				$('#backToProducts').attr('data-id', $this.attr('data-id'));
@@ -304,8 +359,8 @@
 					}
 				});
 			}
-			else if(view == 'product'){
-				if($this.attr('data-id') != '0'){
+			else if(view == 'product' || view == 'edit'){
+				if($this.attr('data-id') != '0' && view != 'edit'){
 					$('#productName, .productTitle').html($this.next().find('label')[0].innerHTML);
 					$('#product .work-top.work-product').show();
 					$('#product .work-top.work-add').hide();
@@ -316,6 +371,7 @@
 						type: 'get',
 						dataType: 'json',
 						success: function(data){
+							$('#editProduct').attr('data-id', data.id);
 							$('#productId').val(data.id);
 							$('#productImage').attr('src', '');
 							$('#productBrand').html('');
@@ -348,9 +404,35 @@
 					$('#product .work-top.work-add').show();
 					$('#product .work-in').hide();					
         			$('#camera-image').attr('src','');
+        			$('#imageName').val('');
         			$('#currentState').html('');
+					$('#addProductName').val('');
+					$('#addBrandName').val('');
+					$('#product').find('input[data-type="search"]').val('');
+					$('#productId').val('0');
+        			$('#currentAction').val('agregar');    				
+					// editar producto
+        			if($this.attr('data-id') != '0' && view == 'edit'){    
+        				$('#currentAction').val('editar');  
+        				$('#productId').val($this.attr('data-id'));	
+						$.ajax({
+							url: baseUrl + '/controllers/productos.php',
+							data: { id: $this.attr('data-id'), lid: lugar, type: 'producto' },
+							type: 'get',
+							dataType: 'json',
+							success: function(data){
+								$('#camera-image').attr('src', baseUrl + data.imagen);
+								$('#imageName').val(data.imagen.substring(data.imagen.lastIndexOf('/')));
+								$('#addProductName').val(data.nombre);
+								$('#product').find('input[data-type="search"]').val(data.marcaNombre);
+								$('#addBrandName').val(data.marcaId);
+							},
+							error: function(xhr, status, error){
+								alert('edit product: ' + status + ' ' + error);
+							}
+						});
+        			}
 				}
-					
 			}
 			else if(view == 'list'){
 				loadList();

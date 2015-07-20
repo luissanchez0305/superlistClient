@@ -12,6 +12,8 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.getElementById('signinBtn').addEventListener('click', this.signin, false);
+        document.getElementById('signupBtn').addEventListener('click', this.signup, false);
     },
     // deviceready Event Handler
     //
@@ -22,19 +24,99 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
+        /*var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
 
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
 
-        console.log('Received Event: ' + id);
+        console.log('Received Event: ' + id);*/
+
+        var value = window.localStorage["superlist_user"];
+        if(typeof value === 'undefined') {
+        	$.mobile.changePage("#signin");  
+        }
+        else{
+			$('#signinloading').show();
+			$.ajax({
+				url: baseUrl + '/userExists.php',
+				data: {e: value},
+				success: function(data){
+					$.mobile.changePage("#index");   
+					$('#signinloading').hide();
+				},
+				error: function(xhr, status, error){
+					alert('quantity: ' + status + ' ' + error);
+				}
+			});          	
+        }         
+    },
+    signin: function(){
+    	$('#signinloading').show();
+    	var email = $('#signinEmail').val();
+    	var passd = $('#signinPassword').val();
+    	
+    	//Revisar credenciales desde webservice
+    	$.ajax({
+    	  url: baseUrl + '/cred.php',
+    	  data: {e: email, p: passd},
+    	  success: function(data){
+    		if(data.posts.length > 0){
+	        	$.mobile.changePage("#index");
+    	        window.localStorage["superlist_user"] = email;
+    	        window.localStorage["superlist_userid"] = data.posts[0].post.id;
+    			$('#signinEmail').val('');
+    	    	$('#signinPassword').val('');
+    		}
+    		else
+    			alert('Email y password no validos');
+    		$('#signinloading').hide();
+    	  	},
+    	  dataType: 'json'
+    	});    	
+    },
+    signup: function(){
+		$('#registerloading').show();
+    	var email = $('#registerEmail').val();
+    	var passd = $('#registerPassword').val();
+    	var name = $('#registerName').val();
+
+        var value = window.localStorage["superlist_user"];
+        if(typeof value === 'undefined') {
+        	if(passd.length > 0 && email.length > 0 && name.length > 0){
+		    	//Revisar credenciales desde webservice
+		    	$.ajax({
+		    	  url: baseUrl + '/userExists.php',
+		    	  data: {e: email},
+		    	  success: function(data){
+		    		if(data.posts.length > 0){
+		    			alert('Usuario ya existe');		
+		    		}
+		    		else {
+		    			$.ajax({
+		    				url: baseUrl + '/createUser.php',
+		    				data: {p: passd, e: email, n: name},
+		    				success: function(data){
+		    	    	        window.localStorage["superlist_user"] = email;
+		    	    	        window.localStorage["superlist_userid"] = data;
+		    		        	$.mobile.changePage("#index");
+		    		        	$('#registerEmail').val('');
+		    		        	$('#registerPassword').val('');
+		    		        	$('#registerName').val('');
+		    				}
+		    			});
+		    		}
+		    		$('#registerloading').hide();
+		    	  	},
+		    	  dataType: 'json'
+		    	});
+        	}
+        	else {
+        		alert('Introduce todas las opciones');
+        	}    	
     }
 };
-
-var lugar = 3;
-var baseUrl = 'http://superlist.esferasoluciones.com';
 
 function modifyQuantity(productId, quantity){
 	$.ajax({
@@ -80,7 +162,7 @@ function loadList($items){
 						'</li>');
 					if(!--count){
 						$items.listview('refresh');
-						$items.find('button').button();								
+						$items.find('.button').button();								
 					}
 				});
 			},
@@ -182,7 +264,7 @@ function getPictureFromGallery(){
     }    
 }
 
-function addProduct(_name, _trademark, _category, _image){
+function addProduct(_action, _name, _trademarkname, _trademark, _category, _image){
 	if(_image.length > 0){
 		var ft = new FileTransfer(), options = new FileUploadOptions();
 	
@@ -198,7 +280,7 @@ function addProduct(_name, _trademark, _category, _image){
 	    ft.upload(_image, baseUrl + "/controllers/upload.php",
 	        function (e) {
 	        	$('#currentState').html('Uploaded');
-	        	sendProduct(_name, _trademark, _category, e.response);
+	        	sendProduct(_action, _name, _trademarkname, _trademark, _category, e.response);
 	        },
 	        function (e) {
 	            $('#currentState').html('Upload failed - ' + e.source + ' - ' + e.code + ' - ' + e.target);
@@ -210,15 +292,15 @@ function addProduct(_name, _trademark, _category, _image){
 		}
    	}
    	else
-   		sendProduct(_name, _trademark, _category);
+   		sendProduct(_action, _name, _trademarkname, _trademark, _category);
 }
 
-function sendProduct(_name, _trademark, _category, _image){	
+function sendProduct(_action, _name, _trademarkname, _trademark, _category, _image){	
     $.ajax({
     	url: baseUrl + '/controllers/producto.php',
     	type: 'GET',
     	dataType: 'json',
-		data: { type: 'agregar', tmId: _trademark, cId: _category, name: _name, image: _image },
+		data: { type: _action, tmName: _trademarkname, tmId: _trademark, cId: _category, name: _name, image: _image },
     	success: function(data){
     		// todo: notificacion de que se guardo con exito    		
 		    $('#backToProducts').click();
