@@ -36,7 +36,8 @@
 	<div data-role="page" data-theme="a" id="signup">
 		<div data-role="header" data-position="fixed">
 			<h1>Super List</h1>
-			<a href="#signin" class="ui-btn ui-shadow ui-corner-all ui-btn-left ui-icon-arrow-l ui-btn-icon-notext" data-iconpos="notext">Signup</a>
+			<a id="goToSigninBtn" href="#signin" class="ui-btn ui-shadow ui-corner-all ui-btn-left ui-icon-arrow-l ui-btn-icon-notext" data-iconpos="notext">Signup</a>
+			<a id="showMenuBtn" href="#right-panel-signup" class="ui-btn ui-shadow ui-corner-all ui-btn-right ui-icon-menu ui-btn-icon-notext menuPanel" data-iconpos="notext">Menu</a>
 		</div>
 		<div data-role="content" data-theme="a">	
 			<form id="signupForm">			
@@ -58,12 +59,19 @@
 				</div>	
 			</form>	
 			<a href="#" data-role="button" id="signupBtn" data-theme="f">Registrarse</a>	
-			<a href="#" style="display:none;" data-role="button" id="signupBtnValidated" data-theme="f">Registrarse</a>	
-			<a href="#" data-role="button" data-theme="d" data-icon="check" onclick="navigator.app.backHistory();">Ingresar</a>
+			<a href="#signin" id="signinBackBtn" data-role="button" data-theme="d" data-icon="check">Ingresar</a>
 			<div id="registerloading" style="width: 100%; display:none;"><img width="50" height="50" src="images/ajax-loader1.gif" /></div>	
 		</div>
 		<div data-role="footer" id="ftrMain" name="ftrMain" data-position="fixed">	
 		</div>
+		<div data-role="panel" data-position="right" id="right-panel-signup">			
+			<ul data-role="listview" data-inset="false" data-shadow="false">
+				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
+				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
+				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
+			</ul>
+		</div>		
 	</div>		
 	<div data-role="page" data-theme="a" id="index">
 		<div data-role="header" data-position="fixed">
@@ -81,8 +89,9 @@
 		<div data-role="panel" data-position="right" id="right-panel-index">			
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
-				<li data-icon="user"><a href="#">Perfil</a></li>
+				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
 				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
+				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
 		</div>
 	</div>
@@ -103,8 +112,9 @@
 		<div data-role="panel" data-position="right" id="right-panel-products">			
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
-				<li data-icon="user"><a href="#">Perfil</a></li>
+				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
 				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
+				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
 		</div>
 	</div>	
@@ -181,8 +191,9 @@
 		<div data-role="panel" data-position="right" id="right-panel-product">			
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
-				<li data-icon="user"><a href="#">Perfil</a></li>
+				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
 				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
+				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
 		</div>			
 	</div>	
@@ -198,8 +209,9 @@
 		<div data-role="panel" data-position="right" id="right-panel-list">			
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
-				<li data-icon="user"><a href="#">Perfil</a></li>
+				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
 				<li data-icon="plus"><a href="#index">Que te hace falta?</a></li>
+				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
 		</div>			
 		<div data-role="footer" data-theme="a" data-position="fixed">
@@ -212,7 +224,7 @@
 	</div>
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>	
-    <script type="text/javascript" src="cordova.js"></script>
+    <!--<script type="text/javascript" src="cordova.js"></script>-->
 	<script type="text/javascript" src="config.js"></script>
 	<script type="text/javascript" src="app.js"></script>
 	<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
@@ -290,26 +302,30 @@
 		    		$('#camera-image').attr('src'));
 		    });	
 		    
-			    $("#signupForm").validate({
-			        // Specify the validation rules
-			        rules: {
-			            registerName: "required",
-			            registerLastname: "required",
-			            email: "required",
-			            password: "required"
-			        },
-			        
-			        // Specify the validation error messages
-			        messages: {
-			        	registerName: "Por favor introduzca un nombre",
-			            registerLastname: "Por favor introduzca un apellido",
-			            email: "Por favor introduzca un email",
-			            password: "Por favor introduzca un password"
-			        },
-			        
-			        submitHandler: function(form){
-			        	$('#signupBtnValidated').click()
-				}
+		    $('#signupBtn').click(function(){
+		    	$("#signupForm").submit();
+		    });
+		    
+			$("#signupForm").validate({
+			    // Specify the validation rules
+			    rules: {
+			        registerName: "required",
+			        registerLastname: "required",
+			        registerEmail: "required",
+			        registerPassword: "required"
+			    },
+			    
+			    // Specify the validation error messages
+			    messages: {
+			    	registerName: "Por favor introduzca un nombre",
+			        registerLastname: "Por favor introduzca un apellido",
+			        registerEmail: "Por favor introduzca un email",
+			        registerPassword: "Por favor introduzca un password"
+			    },
+			    
+			    submitHandler: function(form){
+			    	app.signup();
+			}
 			});
 		});
 		

@@ -13,7 +13,6 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.getElementById('signinBtn').addEventListener('click', this.signin, false);
-        document.getElementById('signupBtnValidated').addEventListener('click', this.signup, false);
         
         document.addEventListener("backbutton", this.backButtonClicked, false);
     },
@@ -35,18 +34,21 @@ var app = {
 
         console.log('Received Event: ' + id);*/
 
+
         var value = window.localStorage["superlist_user"];
         if(typeof value === 'undefined') {
         	$.mobile.changePage("#signin");  
+			changeDisplay(false);	
         }
         else{
 			$('#signinloading').show();
 			$.ajax({
-				url: baseUrl + '/user.php',
+				url: baseUrl + '/controllers/user.php',
 				data: {e: value, type: 'exists'},
 				success: function(data){
 					$.mobile.changePage("#index");   
 					$('#signinloading').hide();
+					changeDisplay(true);	
 				},
 				error: function(xhr, status, error){
 					alert('quantity: ' + status + ' ' + error);
@@ -72,8 +74,7 @@ var app = {
 	    	);	
         }
         else
-            navigator.app.backHistory();     
-        		
+            navigator.app.backHistory();            		
     },
     signin: function(){
     	$('#signinloading').show();
@@ -82,15 +83,16 @@ var app = {
     	
     	//Revisar credenciales desde webservice
     	$.ajax({
-    	  url: baseUrl + '/user.php',
+    	  url: baseUrl + '/controllers/user.php',
     	  data: {e: email, p: passd, type: 'cred'},
     	  success: function(data){
-    		if(data > 0){
+    		if(data.id > 0){
 	        	$.mobile.changePage("#index");
     	        window.localStorage["superlist_user"] = email;
-    	        window.localStorage["superlist_userid"] = data;
+    	        window.localStorage["superlist_userid"] = data.id;
     			$('#signinEmail').val('');
     	    	$('#signinPassword').val('');
+				changeDisplay(true);	
     		}
     		else
     			alert('Email y password no validos');
@@ -111,7 +113,7 @@ var app = {
         	if(passd.length > 0 && email.length > 0 && name.length > 0){
 		    	//Revisar credenciales desde webservice
 		    	$.ajax({
-		    	  url: baseUrl + '/user.php',
+		    	  url: baseUrl + '/controllers/user.php',
 		    	  data: {e: email, type: 'exists'},
 		    	  success: function(data){
 		    		if(data.id > 0){
@@ -119,25 +121,23 @@ var app = {
 		    		}
 		    		else {
 		    			$.ajax({
-		    				url: baseUrl + '/user.php',
+		    				url: baseUrl + '/controllers/user.php',
 		    				data: {i: 0, p: passd, e: email, n: name, a: lastname, type: 'manage'},
 		    				success: function(data){
-		    					if(data){
-			    	    	        window.localStorage["superlist_user"] = email;
-			    	    	        window.localStorage["superlist_userid"] = data.id;
-			    		        	$.mobile.changePage("#index");
-			    		        	$('#registerEmail').val('');
-			    		        	$('#registerPassword').val('');
-			    		        	$('#registerName').val('');
-			    		        	$('#registerLastname').val('');
-		    		        	}
-		    		        	else{
-		    		        		
-		    		        	}
+								$('#registerloading').show();
+			    	    	    window.localStorage["superlist_user"] = email;
+			    	    	    window.localStorage["superlist_userid"] = data.id;
+			    		       	$.mobile.changePage("#index");
+				    		    $('#registerEmail').val('');
+				    		    $('#registerPassword').val('');
+				    		    $('#registerName').val('');
+				    		    $('#registerLastname').val('');
+								$('#goToSigninBtn').hide();
+								$('#showMenuBtn').show();
+    							$('#signinBackBtn').hide();
 		    				}
 		    			});
 		    		}
-		    		$('#registerloading').hide();
 		    	  },
 		    	  dataType: 'json'
 		    	});
@@ -145,9 +145,75 @@ var app = {
         	else {
         		alert('Introduce todas las opciones');
         	}   
-        } 	
+        }
+        else{
+			$.ajax({
+				url: baseUrl + '/controllers/user.php',
+				data: {i: window.localStorage["superlist_userid"], p: passd, e: email, n: name, a: lastname, type: 'manage'},
+				success: function(data){
+					$('#registerloading').hide();
+					window.localStorage["superlist_user"] = email;
+					window.localStorage["superlist_userid"] = data.id;
+				    $.mobile.changePage("#index");
+				    $('#registerEmail').val('');
+				    $('#registerPassword').val('');
+				    $('#registerName').val('');
+				    $('#registerLastname').val('');
+				}
+			});        	
+        }
+    },
+    profile: function(){
+    	var username = window.localStorage["superlist_user"];
+    	if(typeof username === 'undefined'){
+    		this.logout();
+    	}
+    	else{
+			changeDisplay(true);	
+	        $.mobile.changePage("#signup");
+			$.ajax({
+				url: baseUrl + '/controllers/user.php',
+				data: {e: username, type: 'exists'},
+				success: function(data){
+					$('#registerEmail').val(window.localStorage["superlist_user"]);
+					$('#registerName').val(data.name);
+					$('#registerLastname').val(data.lastname);		
+				}
+			});
+	        
+			$('#registerPassword').val('');   
+		} 	
+    },
+    logout: function(){
+        $.mobile.changePage("#signin");      	
+        window.localStorage.removeItem("superlist_user");
+        window.localStorage.removeItem("superlist_userid");
+		$('#registerEmail').val('');
+		$('#registerPassword').val('');
+		$('#registerName').val('');
+		$('#registerLastname').val('');
+		changeDisplay(false);
     }
 };
+
+function changeDisplay($logged){
+	if($logged){
+		$('#signupBtn').html('Actualizar');    
+    	$('#goToSigninBtn').hide();
+    	$('#showMenuBtn').show();
+    	$('#signinBackBtn').hide();		
+       	$('#registerPassword').rules('remove'); 
+	}
+	else 
+	{		
+		$('#signupBtn').html('Registrarse');    
+    	$('#goToSigninBtn').show();
+    	$('#showMenuBtn').hide();
+    	$('#signinBackBtn').show();
+       	$('#registerPassword').rules('remove'); 
+       	$('#registerPassword').rules('add',{ required: true, messages: {required: "Por favor introduzca un password" } }); 
+    }
+}
 
 function modifyQuantity(productId, quantity){
 	$.ajax({
