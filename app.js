@@ -335,6 +335,7 @@ function getPictureFromCamera(){
 	
     function onSuccess(imageURI) {
         $('#camera-image').attr('src',imageURI);
+        $('#imageUploaded').val('true');
     }
 
     function onFail(message) {
@@ -353,6 +354,7 @@ function getPictureFromGallery(){
 	
     function onSuccess(imageURI) {            
         $('#camera-image').attr('src',imageURI);
+        $('#imageUploaded').val('true');
     }
 
     function onFail(message) {
@@ -362,7 +364,7 @@ function getPictureFromGallery(){
 }
 
 function manageProduct(_product, _name, _trademarkname, _trademark, _category, _image){
-	if(_image.length > 0){
+	if(_image.length > 0 && $('#imageUploaded').val() == 'true'){
 		var ft = new FileTransfer(), options = new FileUploadOptions();
 	
 	    options.fileKey = "file";
@@ -400,8 +402,12 @@ function sendProduct(_product, _name, _trademarkname, _trademark, _category, _im
 		data: { type: 'manejar', pId: _product, tmName: _trademarkname, tmId: _trademark, cId: _category, name: _name, 
 				image: _image },
     	success: function(data){
-    		// todo: notificacion de que se guardo con exito    		
-		    $('#backToProducts').click();
+    		// todo: notificacion de que se guardo con exito    
+        	$('#imageUploaded').val('false');
+		    if($('#currentAction').val() == 'agregar')
+		    	$('#backToProducts').click();	
+		    else
+		    	$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();	
     	},
 		error: function(xhr, status, error){
 			alert('sendProduct: ' + status + ' ' + error);
