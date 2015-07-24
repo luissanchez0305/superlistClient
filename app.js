@@ -63,7 +63,7 @@ var app = {
         	$('#backToProducts').click();
         else if($.mobile.activePage.is("#signup"))
   		  	$.mobile.changePage("#signin");   
-        else if($.mobile.activePage.is('#index'))
+        else if($.mobile.activePage.is('#index') || $.mobile.activePage.is('#signin'))
         	navigator.app.exitApp();
         else if($.mobile.activePage.is('#list')){
 	        navigator.notification.confirm(
