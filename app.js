@@ -372,7 +372,7 @@ function manageProduct(_product, _name, _trademarkname, _trademark, _category, _
 	    options.params = { // Whatever you populate options.params with, will be available in req.body at the server-side.
 	        "description": "Uploaded from my phone"
 	    };
-	    $('#currentState').html('Uploading');
+	    $('#currentState').html(_image);
 		try{
 		    ft.upload(_image, baseUrl + "/controllers/upload.php",
 		        function (e) {
