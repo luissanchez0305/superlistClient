@@ -398,17 +398,16 @@ function sendProduct(_product, _name, _trademarkname, _trademark, _category, _im
     $.ajax({
     	url: baseUrl + '/controllers/producto.php',
     	type: 'GET',
-    	dataType: 'html',
+    	dataType: 'json',
 		data: { type: 'manejar', pId: _product, tmName: _trademarkname, tmId: _trademark, cId: _category, name: _name, 
 				image: _image },
     	success: function(data){
     		// todo: notificacion de que se guardo con exito    
         	$('#imageUploaded').val('false');
-        	$('#currentState').html(data);	
-		    /*if($('#currentAction').val() == 'agregar')
+		    if($('#currentAction').val() == 'agregar')
 		    	$('#backToProducts').click();	
 		    else
-		    	$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();*/	
+		    	$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();	
     	},
 		error: function(xhr, status, error){
 			alert('sendProduct: ' + status + ' ' + error);
