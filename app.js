@@ -362,7 +362,7 @@ function getPictureFromGallery(){
 }
 
 function manageProduct(_product, _name, _trademarkname, _trademark, _category, _image){
-	/*if(_image.length > 0){
+	if(_image.length > 0){
 		var ft = new FileTransfer(), options = new FileUploadOptions();
 	
 	    options.fileKey = "file";
@@ -388,7 +388,7 @@ function manageProduct(_product, _name, _trademarkname, _trademark, _category, _
 		    $('#currentState').html('uploadImage ft.upload ' + err.message);
 		}
 	}
-	else*/
+	else
 		sendProduct(_product, _name, _trademarkname, _trademark, _category);
 }
 
