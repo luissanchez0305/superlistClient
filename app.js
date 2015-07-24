@@ -361,8 +361,8 @@ function getPictureFromGallery(){
     }    
 }
 
-function manageProduct(_action, _product, _name, _trademarkname, _trademark, _category, _image){
-	if(_image.length > 0){
+function manageProduct(_product, _name, _trademarkname, _trademark, _category, _image){
+	/*if(_image.length > 0){
 		var ft = new FileTransfer(), options = new FileUploadOptions();
 	
 	    options.fileKey = "file";
@@ -377,7 +377,7 @@ function manageProduct(_action, _product, _name, _trademarkname, _trademark, _ca
 		    ft.upload(_image, baseUrl + "/controllers/upload.php",
 		        function (e) {
 		        	$('#currentState').html('Uploaded');
-		        	sendProduct(_action, _product, _name, _trademarkname, _trademark, _category, e.response);
+		        	sendProduct(_product, _name, _trademarkname, _trademark, _category, e.response);
 		        },
 		        function (e) {
 		            $('#currentState').html('Upload failed - ' + e.source + ' - ' + e.code + ' - ' + e.target);
@@ -388,16 +388,17 @@ function manageProduct(_action, _product, _name, _trademarkname, _trademark, _ca
 		    $('#currentState').html('uploadImage ft.upload ' + err.message);
 		}
 	}
-	else
-		sendProduct(_action, _product, _name, _trademarkname, _trademark, _category);
+	else*/
+		sendProduct(_product, _name, _trademarkname, _trademark, _category);
 }
 
-function sendProduct(_action, _product, _name, _trademarkname, _trademark, _category, _image){
+function sendProduct(_product, _name, _trademarkname, _trademark, _category, _image){
     $.ajax({
     	url: baseUrl + '/controllers/producto.php',
     	type: 'GET',
     	dataType: 'json',
-		data: { type: _action, pId: _product, tmName: _trademarkname, tmId: _trademark, cId: _category, name: _name, image: _image },
+		data: { type: 'manejar', pId: _product, tmName: _trademarkname, tmId: _trademark, cId: _category, name: _name, 
+				image: _image },
     	success: function(data){
     		// todo: notificacion de que se guardo con exito    		
 		    $('#backToProducts').click();

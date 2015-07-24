@@ -20,11 +20,11 @@
 		</div>
 		<div data-role="content" data-theme="a"><div data-role="fieldcontain">
 			<label for="name">Email:</label>
-			<input type="text" name="signinEmail" id="signinEmail" value=""  />
+			<input type="text" name="signinEmail" id="signinEmail" value="lsanchez@esferasoluciones.com"  />
 			</div>			
 			<div data-role="fieldcontain">
 				<label for="name">Contraseña:</label>
-				<input type="password" name="signinPassword" id="signinPassword" value=""  />
+				<input type="password" name="signinPassword" id="signinPassword" value="goingup"  />
 			</div>	
 			<a href="#" id="signinBtn" data-role="button" data-theme="d" data-icon="check">Ingresar</a>	
 			<a href="#signup" data-role="button" data-theme="f">Registrarse</a>	
@@ -287,14 +287,13 @@
 		        }
 		    });	
 		    $('#cancelProductButton').click(function(){
-		    	if($('#currentAction').val() == 'manejar')
+		    	if($('#currentAction').val() == 'agregar')
 		    		$('#backToProducts').click();
 		    	else
 		    		$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();
 		    });	
 		    $('#addProductButton').click(function(){
-		    	manageProduct($('#currentAction').val(),
-		    		$('#productId').val(),
+		    	manageProduct($('#productId').val(),
 		    		$('#addProductName').val(), 
 		    		$('#product').find('input[data-type="search"]').val(),
 		    		$('#addBrandName').val(), 
@@ -456,9 +455,10 @@
 					$('#addBrandName').val('');
 					$('#product').find('input[data-type="search"]').val('');
 					$('#productId').val('0');
-        			$('#currentAction').val('manejar');    				
+        			$('#currentAction').val('agregar');    				
 					// editar producto
         			if($this.attr('data-id') != '0' && view == 'edit'){    
+        				$('#currentAction').val('editar');  
         				$('#productId').val($this.attr('data-id'));	
 						$.ajax({
 							url: baseUrl + '/controllers/productos.php',
