@@ -287,13 +287,14 @@
 		        }
 		    });	
 		    $('#cancelProductButton').click(function(){
-		    	if($('#currentAction').val() == 'agregar')
+		    	if($('#currentAction').val() == 'manejar')
 		    		$('#backToProducts').click();
 		    	else
 		    		$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();
 		    });	
 		    $('#addProductButton').click(function(){
-		    	addProduct($('#currentAction').val(),
+		    	manageProduct($('#currentAction').val(),
+		    		$('#productId').val(),
 		    		$('#addProductName').val(), 
 		    		$('#product').find('input[data-type="search"]').val(),
 		    		$('#addBrandName').val(), 
@@ -455,10 +456,9 @@
 					$('#addBrandName').val('');
 					$('#product').find('input[data-type="search"]').val('');
 					$('#productId').val('0');
-        			$('#currentAction').val('agregar');    				
+        			$('#currentAction').val('manejar');    				
 					// editar producto
         			if($this.attr('data-id') != '0' && view == 'edit'){    
-        				$('#currentAction').val('editar');  
         				$('#productId').val($this.attr('data-id'));	
 						$.ajax({
 							url: baseUrl + '/controllers/productos.php',

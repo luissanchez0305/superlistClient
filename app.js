@@ -361,7 +361,7 @@ function getPictureFromGallery(){
     }    
 }
 
-function addProduct(_action, _name, _trademarkname, _trademark, _category, _image){
+function manageProduct(_action, _product, _name, _trademarkname, _trademark, _category, _image){
 	if(_image.length > 0){
 		var ft = new FileTransfer(), options = new FileUploadOptions();
 	
@@ -374,30 +374,30 @@ function addProduct(_action, _name, _trademarkname, _trademark, _category, _imag
 	    };
 	    $('#currentState').html('Uploading');
 		try{
-	    ft.upload(_image, baseUrl + "/controllers/upload.php",
-	        function (e) {
-	        	$('#currentState').html('Uploaded');
-	        	sendProduct(_action, _name, _trademarkname, _trademark, _category, e.response);
-	        },
-	        function (e) {
-	            $('#currentState').html('Upload failed - ' + e.source + ' - ' + e.code + ' - ' + e.target);
-	        }
-	    , options);
-	   }
+		    ft.upload(_image, baseUrl + "/controllers/upload.php",
+		        function (e) {
+		        	$('#currentState').html('Uploaded');
+		        	sendProduct(_action, _product, _name, _trademarkname, _trademark, _category, e.response);
+		        },
+		        function (e) {
+		            $('#currentState').html('Upload failed - ' + e.source + ' - ' + e.code + ' - ' + e.target);
+		        }
+		    , options);
+	   	}
 		catch(err) {
 		    $('#currentState').html('uploadImage ft.upload ' + err.message);
 		}
-   	}
-   	else
-   		sendProduct(_action, _name, _trademarkname, _trademark, _category);
+	}
+	else
+		sendProduct(_action, _product, _name, _trademarkname, _trademark, _category);
 }
 
-function sendProduct(_action, _name, _trademarkname, _trademark, _category, _image){	
+function sendProduct(_action, _product, _name, _trademarkname, _trademark, _category, _image){
     $.ajax({
     	url: baseUrl + '/controllers/producto.php',
     	type: 'GET',
     	dataType: 'json',
-		data: { type: _action, tmName: _trademarkname, tmId: _trademark, cId: _category, name: _name, image: _image },
+		data: { type: _action, pId: _product, tmName: _trademarkname, tmId: _trademark, cId: _category, name: _name, image: _image },
     	success: function(data){
     		// todo: notificacion de que se guardo con exito    		
 		    $('#backToProducts').click();
