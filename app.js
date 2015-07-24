@@ -404,10 +404,10 @@ function sendProduct(_product, _name, _trademarkname, _trademark, _category, _im
     	success: function(data){
     		// todo: notificacion de que se guardo con exito    
         	$('#imageUploaded').val('false');
-		    if($('#currentAction').val() == 'agregar')
+		    /*if($('#currentAction').val() == 'agregar')
 		    	$('#backToProducts').click();	
 		    else
-		    	$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();	
+		    	$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();*/	
     	},
 		error: function(xhr, status, error){
 			alert('sendProduct: ' + status + ' ' + error);
