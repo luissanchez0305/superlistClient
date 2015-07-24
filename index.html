@@ -264,7 +264,6 @@
 		        if ( value && value.length > 1 ) {
 		            $ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
 		            $ul.listview( "refresh" );
-					$('#product').find('input[data-type="search"]').val('0');
 		            
 		            $.ajax({
 		                url: baseUrl + "/controllers/producto.php",
