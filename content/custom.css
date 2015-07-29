@@ -89,6 +89,11 @@
 			  font-size: 2em;   
 			  padding: 0;
 			}
+			.ui-icon-clipboard:after{
+				background-image: url('/images/clipboard.png');
+				/* Make your icon fit */
+				background-size: 18px 18px;				
+			}
 			.ui-icon-money:after {
 				background-image: url('/images/mobile_pay-512.png');
 				/* Make your icon fit */
@@ -156,3 +161,7 @@
 			  padding-right: 10px;
 			  font-size: 13px;
 			}
+			#modifyCategoriesText{    
+				width: 100%;
+    			float: left;
+    		}

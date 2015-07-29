@@ -36,7 +36,7 @@
 	<div data-role="page" data-theme="a" id="signup">
 		<div data-role="header" data-position="fixed">
 			<h1>Super List</h1>
-			<a id="goToSigninBtn" href="#signin" class="ui-btn ui-shadow ui-corner-all ui-btn-left ui-icon-arrow-l ui-btn-icon-notext" data-iconpos="notext">Signup</a>
+			<a id="goToSigninBtn" href="#signin" class="ui-btn ui-shadow ui-corner-all ui-btn-left ui-icon-arrow-l ui-btn-icon-notext" data-iconpos="notext">Signin</a>
 			<a id="showMenuBtn" href="#right-panel-signup" class="ui-btn ui-shadow ui-corner-all ui-btn-right ui-icon-menu ui-btn-icon-notext menuPanel" data-iconpos="notext">Menu</a>
 		</div>
 		<div data-role="content" data-theme="a">	
@@ -68,6 +68,7 @@
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
 				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
@@ -79,6 +80,9 @@
 			<a href="#right-panel-index" class="ui-btn ui-shadow ui-corner-all ui-btn-right ui-icon-menu ui-btn-icon-notext menuPanel" data-iconpos="notext">Menu</a>
 		</div>
 		<div data-role="content" data-theme="a">
+			<a id="addCategoriesText" href="#categories" style="float:left;" class="ui-shadow ui-btn ui-corner-all ui-btn-inline">
+				Ingrese aquí para agregar sus categorías
+			</a>
 		<div class="content">
 			<div class="clear"> </div>
 		</div>
@@ -90,9 +94,47 @@
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
 				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
+		</div>
+	</div>
+	<div data-role="page" data-theme="a" id="categories">
+		<div data-role="header" data-position="inline">
+			<div class="ui-btn-icon-left ui-icon-arrow-l" onclick="location.href='#index';"></div>
+			<h1>Super List - Escoje tus categorias</h1>
+		</div>
+		<div data-role="content" data-theme="a">
+			<fieldset data-role="controlgroup" id="categoriesSet">
+			    <legend>Escoja todas las categorias que quieras:</legend>
+			    <input type="checkbox" name="categories[]" id="checkbox-v-0">
+			    <label for="checkbox-v-0">One</label>
+			
+			    <input type="checkbox" name="categories[]" id="checkbox-v-1">
+			    <label for="checkbox-v-1">Two</label>
+			
+			    <input type="checkbox" name="categories[]" id="checkbox-v-2">
+			    <label for="checkbox-v-2">Three</label>	
+			
+			    <input type="checkbox" name="categories[]" id="checkbox-v-3">
+			    <label for="checkbox-v-3">One</label>
+			
+			    <input type="checkbox" name="categories[]" id="checkbox-v-4">
+			    <label for="checkbox-v-4">Two</label>
+			
+			    <input type="checkbox" name="categories[]" id="checkbox-v-5">
+			    <label for="checkbox-v-5">Three</label>	
+			
+			    <input type="checkbox" name="categories[]" id="checkbox-v-6">
+			    <label for="checkbox-v-6">Two</label>
+			
+			    <input type="checkbox" name="categories[]" id="checkbox-v-7">
+			    <label for="checkbox-v-7">Three</label>	
+			</fieldset>	
+			<!--<a id="modifyCategoriesButton" style="float:left;" class="ui-shadow ui-btn ui-btn-icon-plus ui-corner-all ui-btn-inline">Guardar</a>
+			<a id="cancelCategoriesButton" onclick="navigator.app.backHistory();" style="float:left;" class="ui-shadow ui-btn ui-corner-all ui-btn-inline">Cancelar</a>
+			<label id="modifyCategoriesText"></label>	-->
 		</div>
 	</div>
 	<div id="products" data-role="page" data-theme="a">
@@ -113,6 +155,7 @@
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
 				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
@@ -156,18 +199,21 @@
 						  </div>
 						</div>
 						<input type="hidden" id="imageName" name="imageName" />
-						<h2>
-							<input type="hidden" id="currentAction" name="currentAction" />
-							<input type="text" id="addProductName" name="addProductName" placeholder="Nombre"/>
-							<ul id="brandNameAutocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Marca" data-filter-theme="a"></ul>
-							<input type="hidden" id="addBrandName" name="addBrandName" />
-						</h2>
-						<div>
-							<input type="button" id="addProductButton" value="Guardar"/>
-							<input type="button" id="cancelProductButton" value="Cancelar"/>
-						</div>
 					</div>
 					<div class="work-in">
+						<div class="addData">
+							<h2>
+								<input type="hidden" id="currentAction" name="currentAction" />
+								<ul id="productNameAutocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Producto" data-filter-theme="a"></ul>														
+								<input type="hidden" id="addProductName" name="addProductName" placeholder="Nombre"/>
+								<!--<ul id="brandNameAutocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Marca" data-filter-theme="a"></ul>-->
+								<input type="hidden" id="addBrandName" name="addBrandName" />
+							</h2>
+							<div>
+								<input type="button" id="addProductButton" value="Guardar"/>
+								<input type="button" id="cancelProductButton" value="Cancelar"/>
+							</div>							
+						</div>
 						<div class="info">
 							<h3 id="productBrand"></h3>
 							<ul class="likes">
@@ -193,6 +239,7 @@
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
 				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
@@ -211,6 +258,7 @@
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
 				<li data-icon="plus"><a href="#index">Que te hace falta?</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
@@ -234,26 +282,41 @@
 		$(document).ready(function(){		  
 			$('#popupSuccess').hide();
 			loadList($('#items'));
-			$.ajax({
-				url: baseUrl + '/controllers/index.php',
-				dataType: "json",
-				success: function(data){
-					$('#index .content .content-grid').remove();
-					$.each(data, function(i, categoria){
-						$('#index .content').append(
-							'<div class="content-grid">'+
-								'<a href="#products" class="b-link-stripe b-animate-go  thickbox" data-id="'+categoria.id+'">'+
-									'<img  src="'+baseUrl+'/uploads/'+categoria.imagen+'" />'+
-									'<div class="categoryName">'+categoria.nombre+'</div>'+
-								'</a>'+
-							'</div>'
-						);
-					});
-				},
-				error: function(xhr, status, error){
-					alert('categorias: ' + status + ' ' + error);
-				}
-			});
+			loadCategories();
+			
+			// crear el autocomplete de nombre de productos
+
+		    $( "#productNameAutocomplete" ).on( "filterablebeforefilter", function ( e, data ) {
+		        var $ul = $( this ),
+		            $input = $( data.input ),
+		            value = $input.val(),
+		            html = "";
+		        $ul.html( "" );
+		        if ( value && value.length > 1 ) {
+		            $ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
+		            $ul.listview( "refresh" );
+		            
+		            $.ajax({
+		                url: baseUrl + "/controllers/producto.php",
+		                dataType: "json",
+		                data: {
+		                    q: $input.val(),
+		                    type: 'productos'
+		                },
+		                success: function ( response ) {
+			                $.each( response, function ( i, val ) {
+			                    html += '<li data-id="'+val.id+'" onclick="chooseProducto(this)">' + val.nombre + '</li>';
+			                });
+			                $ul.html( html );
+			                $ul.listview( "refresh" );
+			                $ul.trigger( "updatelayout");
+			            },
+						error: function(xhr, status, error){
+							alert('autocomplete: ' + status + ' ' + error);
+						}
+		            });
+		        }
+		    });				
 			
 			// crear el autocomplete de marcas
 		    $( "#brandNameAutocomplete" ).on( "filterablebeforefilter", function ( e, data ) {
@@ -295,8 +358,8 @@
 		    });	
 		    $('#addProductButton').click(function(){
 		    	manageProduct($('#productId').val(),
-		    		$('#addProductName').val(), 
-		    		$('#product').find('input[data-type="search"]').val(),
+		    		$('#product').find('input[placeholder="Producto"]').val(), 
+		    		$('#product').find('input[placeholder="Marca"]').val(),
 		    		$('#addBrandName').val(), 
 		    		$('#backToProducts').attr('data-id'), 
 		    		$('#camera-image').attr('src'));
@@ -363,6 +426,16 @@
 			modifyQuantity(pid, value + 1);
 		});
 		
+		$('body').on('change', 'input[id^="checkbox-v"]', function(){
+			var $this = $(this);
+			if($this.is(':checked') && $this.prev().hasClass('ui-checkbox-off'))
+				$this.prev().removeClass('ui-checkbox-off').addClass('ui-checkbox-on');
+			else if(!$this.is(':checked') && $this.prev().hasClass('ui-checkbox-on'))
+				$this.prev().removeClass('ui-checkbox-on').addClass('ui-checkbox-off');
+			
+			modifyCategories($this.is(':checked'), $this.val());
+		});
+		
 		// Navegador maestro
 		$('body').on("click", 'a, #backToProducts, #editProduct', function() {
 			var $this = $(this);
@@ -386,7 +459,7 @@
 											'<img  src="'+baseUrl+producto.imagen+'" style="width:74%;height:74%; display:block; margin: auto;"/>'+
 										'</a>'+
 										'<div class="valueControllers">'+
-											'<label style="padding-top:11px; padding-left: 5px; float:left; font-weight: bold; color: #3388cc;">'+producto.nombre + ' - ' + producto.marcaNombre +'</label>'+
+											'<label style="padding-top:11px; padding-left: 5px; float:left; font-weight: bold; color: #3388cc;">' + producto.nombre + '</label>'+
 					    					'<a style="float:right;" class="mngQty ui-shadow ui-btn ui-corner-all ui-icon-plus ui-btn-icon-notext ui-btn-inline">Button</a>'+
 					    					'<label class="quantity" style="width: 10px; float:right;	padding-top: 15px; padding-right: 8px;">'+producto.cantidad+'</label>'+
 					    					'<a style="float:right;" class="mngQty ui-shadow ui-btn ui-corner-all ui-icon-minus ui-btn-icon-notext ui-btn-inline">Button</a>'+
@@ -407,10 +480,11 @@
 			}
 			else if(view == 'product' || view == 'edit'){
 				if($this.attr('data-id') != '0' && view != 'edit'){
+					$('.addData').hide();
 					$('#productName, .productTitle').html($this.next().find('label')[0].innerHTML);
 					$('#product .work-top.work-product').show();
 					$('#product .work-top.work-add').hide();
-					$('#product .work-in').show();
+					$('#product .work-in .info').show();
 					$.ajax({
 						url: baseUrl + '/controllers/productos.php',
 						data: { id: $this.attr('data-id'), lid: lugar, type: 'producto' },
@@ -445,20 +519,22 @@
 					});
 				}
 				else{	
+					$('.addData').show();
 					$('#productName, .productTitle').html('Agrega un producto');				
 					$('#product .work-top.work-product').hide();
 					$('#product .work-top.work-add').show();
-					$('#product .work-in').hide();					
+					$('#product .work-in .info').hide();					
         			$('#camera-image').attr('src','');
         			$('#imageName').val('');
         			$('#currentState').html('');
 					$('#addProductName').val('');
 					$('#addBrandName').val('');
-					$('#product').find('input[data-type="search"]').val('');
+					$('#product').find('input[placeholder="Producto"]').val('');
 					$('#productId').val('0');
         			$('#currentAction').val('agregar');    				
 					// editar producto
         			if($this.attr('data-id') != '0' && view == 'edit'){    
+						$('#productName, .productTitle').html('Editar un producto');
         				$('#currentAction').val('editar');  
         				$('#productId').val($this.attr('data-id'));	
 						$.ajax({
@@ -469,9 +545,8 @@
 							success: function(data){
 								$('#camera-image').attr('src', baseUrl + data.imagen);
 								$('#imageName').val(data.imagen.substring(data.imagen.lastIndexOf('/')));
-								$('#addProductName').val(data.nombre);
-								$('#product').find('input[data-type="search"]').val(data.marcaNombre);
-								$('#addBrandName').val(data.marcaId);
+								$('#addProductName').val(data.id);
+								$('#product').find('input[placeholder="Producto"]').val(data.nombre);
 							},
 							error: function(xhr, status, error){
 								alert('edit product: ' + status + ' ' + error);
@@ -482,6 +557,33 @@
 			}
 			else if(view == 'list'){
 				loadList($('#items'));
+			}
+			else if(view == 'categories'){
+				$.ajax({
+					url: baseUrl + '/controllers/categoria.php',
+					data: { id: window.localStorage["superlist_userid"], type: 'categories' },
+					type: 'get',
+					dataType: 'json',
+					success: function(data){			
+						var count = data.length;
+						$.each(data, function(i, categoria){
+							$checkbox = $('#checkbox-v-' + i);
+							if(categoria.usuarioid > 0){
+								$checkbox.prev().removeClass('ui-checkbox-off').addClass('ui-checkbox-on');
+								$checkbox.attr('checked', 'checked');
+							}
+							else{
+								$checkbox.prev().removeClass('ui-checkbox-on').addClass('ui-checkbox-off');
+								$checkbox.removeAttr('checked');								
+							}
+							$checkbox.val(categoria.id);
+							$checkbox.prev().html(categoria.nombre);
+						});			
+					},
+					error: function(xhr, status, error){
+						alert('categories: '+ status + ' ' + error);
+					}
+				});
 			}
 		});
 	</script>

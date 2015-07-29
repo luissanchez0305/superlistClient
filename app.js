@@ -13,6 +13,7 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.getElementById('signinBtn').addEventListener('click', this.signin, false);
+        //document.getElementById('modifyCategoriesButton').addEventListener('click', this.modifyCategories, false);
         
         document.addEventListener("backbutton", this.backButtonClicked, false);
     },
@@ -196,6 +197,27 @@ var app = {
     }
 };
 
+function modifyCategories(add, id){	  
+	$.ajax({
+		url: baseUrl + '/controllers/categoria.php',
+		data: { category: id, id: window.localStorage["superlist_userid"], type: add ? 'add' : 'delete' },
+		type: "get",
+		success: function (data){ loadCategories(); /*modifyCategoriesResult(data.success);*/ },
+		error: function(xhr, status, error){
+			alert('Categories update: ' + status + ' ' + error);
+		}
+	});
+}
+
+function modifyCategoriesResult(success){
+	if(success){
+		$('#modifyCategoriesText').html('Guardado con exito');
+		setTimeout(function(){ $('#modifyCategoriesText').html(''); loadCategories(); navigator.app.backHistory(); }, 2000);
+	}
+	else
+		$('#modifyCategoriesText').html('Hubo un error: ' + data.msg);
+}
+
 function changeDisplay($logged){
 	if($logged){
 		$('#signupBtn').html('Actualizar');    
@@ -203,6 +225,7 @@ function changeDisplay($logged){
     	$('#showMenuBtn').show();
     	$('#signinBackBtn').hide();		
        	$('#registerPassword').rules('remove'); 
+       	loadCategories();
 	}
 	else 
 	{		
@@ -269,6 +292,38 @@ function loadList($items){
 		});
 }
 
+function loadCategories(){	
+	var userId = window.localStorage["superlist_userid"];
+	if(typeof userId != 'undefined'){
+		$.ajax({
+			url: baseUrl + '/controllers/index.php',
+			data: { id: userId },
+			dataType: "json",
+			success: function(data){
+				$('#index .content .content-grid').remove();
+				if(data.length>0){
+					$.each(data, function(i, categoria){
+						$('#index .content').append(
+							'<div class="content-grid">'+
+								'<a href="#products" class="b-link-stripe b-animate-go  thickbox" data-id="'+categoria.id+'">'+
+									'<img  src="'+baseUrl+'/uploads/'+categoria.imagen+'" />'+
+									'<div class="categoryName">'+categoria.nombre+'</div>'+
+								'</a>'+
+							'</div>'
+						);
+					});
+					$('#addCategoriesText').hide();
+				}
+				else
+					$('#addCategoriesText').show();				
+			},
+			error: function(xhr, status, error){
+				alert('categorias: ' + status + ' ' + error);
+			}
+		});
+	}
+}
+
 function appendAddProduct($obj){			
 	$obj.append('<div class="content-grid">'+
 		'<a href="#product" class="b-link-stripe b-animate-go thickbox" data-id="0">'+
@@ -321,8 +376,15 @@ function buyList(){
 function chooseMarca(obj){
 	var $this = $(obj);
 	$('#addBrandName').val($this.attr('data-id'));
-	$('#product').find('input[data-type="search"]').val($this.html());
+	$('#product').find('input[placeholder="Marca"]').val($this.html());
 	$('#brandNameAutocomplete').html('');
+}
+
+function chooseProducto(obj){
+	var $this = $(obj);
+	$('#addProductName').val($this.attr('data-id'));
+	$('#product').find('input[placeholder="Producto"]').val($this.html());
+	$('#productNameAutocomplete').html('');
 }
 
 function getPictureFromCamera(){
@@ -406,8 +468,10 @@ function sendProduct(_product, _name, _trademarkname, _trademark, _category, _im
         	$('#imageUploaded').val('false');
 		    if($('#currentAction').val() == 'agregar')
 		    	$('#backToProducts').click();	
-		    else
-		    	$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();	
+		    else{
+		    	$('#products').find('a[data-id="'+$('#productId').val()+'"]').click();
+		    	$('#productName, .productTitle').html(_name);
+		    }	
     	},
 		error: function(xhr, status, error){
 			alert('sendProduct: ' + status + ' ' + error);
