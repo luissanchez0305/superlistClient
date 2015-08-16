@@ -171,6 +171,7 @@ var app = {
     	}
     	else{
 			changeDisplay(true);	
+			$('#profileControl').show();
 	        $.mobile.changePage("#signup");
 			$.ajax({
 				url: baseUrl + '/controllers/user.php',
@@ -225,6 +226,7 @@ function changeDisplay($logged){
     	$('#showMenuBtn').show();
     	$('#signinBackBtn').hide();		
        	$('#registerPassword').rules('remove'); 
+        $('#profileControl').show();
        	loadCategories();
 	}
 	else 
@@ -234,7 +236,9 @@ function changeDisplay($logged){
     	$('#showMenuBtn').hide();
     	$('#signinBackBtn').show();
        	$('#registerPassword').rules('remove'); 
-       	$('#registerPassword').rules('add',{ required: true, messages: {required: "Por favor introduzca un password" } }); 
+       	$('#registerPassword').rules('add',{ required: true, messages: {required: "Por favor introduzca un password" } });
+        $('#profileControl').hide();
+        $('#profileLists').hide(); 
     }
 }
 

@@ -40,27 +40,41 @@
 			<a id="showMenuBtn" href="#right-panel-signup" class="ui-btn ui-shadow ui-corner-all ui-btn-right ui-icon-menu ui-btn-icon-notext menuPanel" data-iconpos="notext">Menu</a>
 		</div>
 		<div data-role="content" data-theme="a">	
-			<form id="signupForm">			
-				<div data-role="fieldcontain">
-					<label for="name">Nombre:</label>
-					<input type="text" name="registerName" id="registerName" value=""  />
-				</div>					
-				<div data-role="fieldcontain">
-					<label for="name">Apellido:</label>
-					<input type="text" name="registerLastname" id="registerLastname" value=""  />
-				</div>					
-				<div data-role="fieldcontain">
-					<label for="name">Email:</label>
-					<input type="text" name="registerEmail" id="registerEmail" value=""  />
-				</div>			
-				<div data-role="fieldcontain">
-					<label for="name">Contraseña:</label>
-					<input type="password" name="registerPassword" id="registerPassword" value=""  />
-				</div>	
-			</form>	
-			<a href="#" data-role="button" id="signupBtn" data-theme="f">Registrarse</a>	
-			<a href="#signin" id="signinBackBtn" data-role="button" data-theme="d" data-icon="check">Ingresar</a>
-			<div id="registerloading" style="width: 100%; display:none;"><img width="50" height="50" src="images/ajax-loader1.gif" /></div>	
+			<fieldset data-role="controlgroup" data-type="horizontal" id="profileControl">
+			    <input type="radio" name="radio-choice-h-2" id="radio-choice-h-2a" value="on" checked="checked">
+			    <label for="radio-choice-h-2a">Mi info</label>
+			    <input type="radio" name="radio-choice-h-2" id="radio-choice-h-2b" value="off">
+			    <label for="radio-choice-h-2b">Listas</label>
+			</fieldset>
+			<div id="profile">
+				<form id="signupForm">			
+					<div data-role="fieldcontain">
+						<label for="name">Nombre:</label>
+						<input type="text" name="registerName" id="registerName" value=""  />
+					</div>					
+					<div data-role="fieldcontain">
+						<label for="name">Apellido:</label>
+						<input type="text" name="registerLastname" id="registerLastname" value=""  />
+					</div>					
+					<div data-role="fieldcontain">
+						<label for="name">Email:</label>
+						<input type="text" name="registerEmail" id="registerEmail" value=""  />
+					</div>			
+					<div data-role="fieldcontain">
+						<label for="name">Contraseña:</label>
+						<input type="password" name="registerPassword" id="registerPassword" value=""  />
+					</div>	
+				</form>	
+				<a href="#" data-role="button" id="signupBtn" data-theme="f">Registrarse</a>	
+				<a href="#signin" id="signinBackBtn" data-role="button" data-theme="d" data-icon="check">Ingresar</a>
+				<div id="registerloading" style="width: 100%; display:none;"><img width="50" height="50" src="images/ajax-loader1.gif" /></div>
+			</div>	
+			<div id="profileLists">
+			<!--TODO: AGREGAR LUGAR A MI PERFIL-->
+				<div id="my_lists"></div>
+			<!--TODO: CREAR LUGAR NUEVO Y AGREGARLO A MI PERFIL-->
+			<!--TODO: BORRAR LISTA DE MI PERFIL. SI ES EL UNICO QUE TIENE ESE LUGAR BORRARLO DEL TODO -->
+			</div>
 		</div>
 		<div data-role="footer" id="ftrMain" name="ftrMain" data-position="fixed">	
 		</div>
@@ -137,6 +151,7 @@
 			<label id="modifyCategoriesText"></label>	-->
 		</div>
 	</div>
+	
 	<div id="products" data-role="page" data-theme="a">
 		<div data-role="header" data-position="inline" data-position="fixed">			
 			<div class="ui-btn-icon-left ui-icon-arrow-l" onclick="location.href='#index';"></div>
@@ -269,8 +284,9 @@
 		</div>
 		<div data-role="popup" id="buyPopup">
 			<p>Su compra ha sido realizada</p>
-		</div>
+		</div>$('#profileLists')
 	</div>
+
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>	
     <script type="text/javascript" src="cordova.js"></script>
@@ -281,11 +297,46 @@
         app.initialize();
 		$(document).ready(function(){		  
 			$('#popupSuccess').hide();
+		    $('#profileControl').hide();
+		    $('#profileLists').hide();
 			loadList($('#items'));
 			loadCategories();
 			
+			// control de la info del usuario y listas en perfil
+			$('input[name="radio-choice-h-2"]').click(function(){
+				if($('#profile').is(':visible')){
+					$.ajax({
+		                url: baseUrl + "/controllers/usuario_lugar.php",
+		                dataType: "json",
+		                data: {
+		                    type: 'userlist',
+		                    uid: window.localStorage["superlist_userid"]
+		                },
+		                success: function ( response ) {
+		                	if(response.status == 'ok'){
+		                		for(i = 0; i < response.user_places.length; i++){
+		                			var user_place = response.user_places[i];
+			                		var input = "<input style='margin-top:20px;' type='checkbox' name='userPlace[]' id='checkbox-v-"+i+"' value='"+user_place.lugarid+"'>";
+				    				input += "<label for='checkbox-v-"+i+"'>"+user_place.nombreLugar+"</label>";
+									$('#my_lists').html('');
+									$('#my_lists').append(input);
+								}
+		                	}
+		                },
+						error: function(xhr, status, error){
+							alert('usuario_lugar: ' + status + ' ' + error);
+						}
+					});
+					$('#profileLists').show();
+					$('#profile').hide();					
+				}
+				else{
+					$('#profileLists').hide();
+					$('#profile').show();					
+				}
+			});			
+			
 			// crear el autocomplete de nombre de productos
-
 		    $( "#productNameAutocomplete" ).on( "filterablebeforefilter", function ( e, data ) {
 		        var $ul = $( this ),
 		            $input = $( data.input ),
