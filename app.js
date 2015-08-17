@@ -224,13 +224,13 @@ function modifyCategoriesResult(success){
 
 function changeDisplay($logged){
 	if($logged){
-		alert('aja');
 		$('#signupBtn').html('Actualizar');    
     	$('#goToSigninBtn').hide();
     	$('#showMenuBtn').show();
     	$('#signinBackBtn').hide();		
        	$('#registerPassword').rules('remove'); 
         $('#profileControl').show();
+		alert('aja');
        	loadCategories();
 	}
 	else 
