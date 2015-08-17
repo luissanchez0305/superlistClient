@@ -173,12 +173,12 @@ var app = {
 			changeDisplay(true);	
 			$('#profileControl').show();
 	        $.mobile.changePage("#signup");
+					alert(username);
 			$.ajax({
 				url: baseUrl + '/controllers/user.php',
 				data: {e: username, type: 'exists'},
 				success: function(data){
-					alert(data.name);
-					$('#registerEmail').val(window.localStorage["superlist_user"]);
+					$('#registerEmail').val(username);
 					$('#registerName').val(data.name);
 					$('#registerLastname').val(data.lastname);		
 				},		
