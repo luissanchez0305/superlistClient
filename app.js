@@ -171,7 +171,6 @@ var app = {
     	}
     	else{
 			changeDisplay(true);	
-					alert(username);
 			$('#profileControl').show();
 	        $.mobile.changePage("#signup");
 			$.ajax({
@@ -225,6 +224,7 @@ function modifyCategoriesResult(success){
 
 function changeDisplay($logged){
 	if($logged){
+		alert('aja');
 		$('#signupBtn').html('Actualizar');    
     	$('#goToSigninBtn').hide();
     	$('#showMenuBtn').show();
