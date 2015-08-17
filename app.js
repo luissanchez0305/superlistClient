@@ -170,7 +170,6 @@ var app = {
     		this.logout();
     	}
     	else{
-    		alert(username);
 			changeDisplay(true);	
 			$('#profileControl').show();
 	        $.mobile.changePage("#signup");
@@ -178,6 +177,7 @@ var app = {
 				url: baseUrl + '/controllers/user.php',
 				data: {e: username, type: 'exists'},
 				success: function(data){
+					alert(data);
 					$('#registerEmail').val(window.localStorage["superlist_user"]);
 					$('#registerName').val(data.name);
 					$('#registerLastname').val(data.lastname);		
