@@ -166,6 +166,7 @@ var app = {
     },
     profile: function(){
     	var username = window.localStorage["superlist_user"];
+    	alert(username);
     	if(typeof username === 'undefined'){
     		this.logout();
     	}
