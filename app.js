@@ -170,8 +170,8 @@ var app = {
     		this.logout();
     	}
     	else{
-					alert(username);
 			changeDisplay(true);	
+					alert(username);
 			$('#profileControl').show();
 	        $.mobile.changePage("#signup");
 			$.ajax({
