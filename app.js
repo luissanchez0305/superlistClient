@@ -170,10 +170,10 @@ var app = {
     		this.logout();
     	}
     	else{
+					alert(username);
 			changeDisplay(true);	
 			$('#profileControl').show();
 	        $.mobile.changePage("#signup");
-					alert(username);
 			$.ajax({
 				url: baseUrl + '/controllers/user.php',
 				data: {e: username, type: 'exists'},
