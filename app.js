@@ -166,11 +166,11 @@ var app = {
     },
     profile: function(){
     	var username = window.localStorage["superlist_user"];
-    	alert(username);
     	if(typeof username === 'undefined'){
     		this.logout();
     	}
     	else{
+    		alert(username);
 			changeDisplay(true);	
 			$('#profileControl').show();
 	        $.mobile.changePage("#signup");
@@ -181,6 +181,9 @@ var app = {
 					$('#registerEmail').val(window.localStorage["superlist_user"]);
 					$('#registerName').val(data.name);
 					$('#registerLastname').val(data.lastname);		
+				},		
+				error: function(xhr, status, error){
+					alert('Profile: ' + status + ' ' + error);
 				}
 			});
 	        
