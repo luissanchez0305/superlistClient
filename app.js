@@ -230,7 +230,6 @@ function changeDisplay($logged){
     	$('#signinBackBtn').hide();		
        	$('#registerPassword').rules('remove'); 
         $('#profileControl').show();
-		alert('aja');
        	loadCategories();
 	}
 	else 
