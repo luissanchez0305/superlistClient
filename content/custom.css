@@ -1,5 +1,14 @@
+			.userPlaceTitle{    
+				top: -18px;
+			    left: 10px;
+			    position: relative;
+			}
+			.listItem{
+				background-color: white;
+				/*padding: 10px !important;*/
+			}
 			.hide{
-				display:none;
+				display:none !important;
 			}
 			.menuPanel{
 				border-color: transparent;

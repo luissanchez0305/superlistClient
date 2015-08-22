@@ -26,16 +26,6 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        /*var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);*/
-
-
         var value = window.localStorage["superlist_user"];
         if(typeof value === 'undefined') {
         	$.mobile.changePage("#signin");  
@@ -66,7 +56,7 @@ var app = {
   		  	$.mobile.changePage("#signin");   
         else if($.mobile.activePage.is('#index') || $.mobile.activePage.is('#signin'))
         	navigator.app.exitApp();
-        else if($.mobile.activePage.is('#list')){
+        else if($.mobile.activePage.is('#shoppinglist')){
 	        navigator.notification.confirm(
 		        'Desea salir?!',  // message
 		        onConfirm,              // callback to invoke with index of button pressed
@@ -91,9 +81,12 @@ var app = {
 	        	$.mobile.changePage("#index");
     	        window.localStorage["superlist_user"] = email;
     	        window.localStorage["superlist_userid"] = data.id;
+    	        if(typeof window.localStorage["superlist_listid"] === 'undefined' || window.localStorage["superlist_listid"].length == 0){
+    	        	getUserFirstList(data.id);
+    	      	}
     			$('#signinEmail').val('');
     	    	$('#signinPassword').val('');
-				changeDisplay(true);	
+				changeDisplay(true);
     		}
     		else
     			alert('Email y password no validos');
@@ -128,6 +121,9 @@ var app = {
 								$('#registerloading').show();
 			    	    	    window.localStorage["superlist_user"] = email;
 			    	    	    window.localStorage["superlist_userid"] = data.id;
+				    	        if(typeof window.localStorage["superlist_listid"] === 'undefined'){
+				    	        	getUserFirstList(data.id);
+				    	      	}
 			    		       	$.mobile.changePage("#index");
 				    		    $('#registerEmail').val('');
 				    		    $('#registerPassword').val('');
@@ -201,6 +197,21 @@ var app = {
     }
 };
 
+function getUserFirstList(_uid){	
+	$.ajax({
+	  	url: baseUrl + '/controllers/lista.php',
+	  	data: { uid: _uid, type:'getfirst'},
+	  	success: function(data){
+			window.localStorage["superlist_listid"] = data.id;
+			$listBtn = $('.listBtn');
+			$listBtn.html('Mis Listas ('+data.nombre+')');
+	  	},
+	  	error: function(xhr, status, error)    {
+			alert('get first list: ' + status + ' ' + error);
+		}    	
+	});
+}
+
 function modifyCategories(add, id){	  
 	$.ajax({
 		url: baseUrl + '/controllers/categoria.php',
@@ -230,7 +241,10 @@ function changeDisplay($logged){
     	$('#signinBackBtn').hide();		
        	$('#registerPassword').rules('remove'); 
         $('#profileControl').show();
+        $('#cancelBackBtn').show();
        	loadCategories();
+       	loadShoppingList($('#items'));
+       	displayListBtn(true);
 	}
 	else 
 	{		
@@ -242,38 +256,50 @@ function changeDisplay($logged){
        	$('#registerPassword').rules('add',{ required: true, messages: {required: "Por favor introduzca un password" } });
         $('#profileControl').hide();
         $('#profileLists').hide(); 
+        $('#cancelBackBtn').hide();
+		window.localStorage["superlist_user"] = '';
+		window.localStorage["superlist_userid"] = '';
+		window.localStorage["superlist_listid"] = '';
+       	displayListBtn(false);
     }
 }
 
 function modifyQuantity(productId, quantity){
-	$.ajax({
-		url: baseUrl + '/controllers/productQuantity.php',
-		data: {pid: productId, lid: lugar, qty: quantity},
-		type: 'get',
-		success: function(data){
-			if(data)
-				console.log('success');
-			else
-				console.log('fail');
-		},
-		error: function(xhr, status, error){
-			alert('quantity: ' + status + ' ' + error);
-		}
-	});
+	var _lid = window.localStorage["superlist_listid"];
+	if(typeof _lid === 'undefined' || _lid.length == 0){
+		$.mobile.activePage.find('.listBtn').click();
+	}
+	else
+		$.ajax({
+			url: baseUrl + '/controllers/productQuantity.php',
+			data: {pid: productId, lid: window.localStorage["superlist_listid"], qty: quantity},
+			type: 'get',
+			success: function(data){
+				if(data)
+					console.log('success');
+				else
+					console.log('fail');
+			},
+			error: function(xhr, status, error){
+				alert('quantity: ' + status + ' ' + error);
+			}
+		});
 }
 
-function loadList($items){	
-		$items.find('li').remove();		
+function loadShoppingList($items){	
+	if(typeof window.localStorage["superlist_listid"] != 'undefined'){
+		$items.find('li').remove();
 		$.ajax({
 			url: baseUrl + '/controllers/productos.php',
-			data: { lid: lugar, type: 'lista' },
+			data: { lid: window.localStorage["superlist_listid"], type: 'lista' },
 			type: 'get',
 			dataType: 'json',
 			success: function(data){
-				var count = data.length;
+				$ul = $items;
+			    $ul.listview();
+			    var html = '';
 				$.each(data, function(i, producto){
-					$items.append(				
-						'<li data-id="'+producto.id+'" data-status="buy">'+
+					html += '<li data-id="'+producto.id+'" data-status="buy">'+
 							'<div style="width: 20%; float:left; margin-right: 5%;">'+
 								'<img src="'+baseUrl+producto.imagen+'" style="width: 100%;"/>'+
 							'</div>'+
@@ -286,17 +312,146 @@ function loadList($items){
 								'<a class="button" data-icon="check" style="width:60px; height: 50px; float: left; margin-right: 10px;" onclick="buy(this)"></a>'+
 								'<a class="button" data-icon="delete" style="width:60px; height: 50px; float: left;" onclick="unbuy(this)"></a>'+
 							'</div>'+
-						'</li>');
-					if(!--count){
-						$items.listview('refresh');
-						$items.find('.button').button();								
-					}
+						'</li>';
 				});
+				$ul.append(html);
+				$ul.listview( "refresh" );
+				$ul.trigger( "updatelayout");		
+				$ul.find('.button').button();
 			},
 			error: function(xhr, status, error){
 				alert('list: ' + status + ' ' + error);
 			}	
 		});
+	}
+}
+
+function displayListBtn(show){
+	$listBtn = $('.listBtn');
+	if(show){	
+		getActivatedLists(function(data){
+			if(data.length > 1)
+				$listBtn.removeClass('hide');
+			else
+				$listBtn.addClass('hide');
+		});
+	}		
+	else
+		$listBtn.addClass('hide');
+}
+
+function getActivatedLists(callback){	
+		$.ajax({	
+			url: baseUrl + '/controllers/lista.php',
+			data: { uid: window.localStorage["superlist_userid"], type: 'userlists' },
+			type: 'get',
+			dataType: 'json',
+			success: function(data){
+				callback(data);
+			},
+			error: function(xhr, status, error){
+				alert('user lists: '+ status + ' ' + error);
+			}
+		});
+	
+}
+
+function updateUserPlace(obj,_pid){
+	updateUserPlaceAjax(_pid);
+	setTimeout(function(){
+		disableSingleListItem(_pid);
+	}, 500);
+}
+
+function disableSingleListItem(_pid){	
+	getActivatedLists(function(data){
+		$('.profileListItem').each(function(){
+			if(data.length == 1 && this.value == 'yes')
+				$(this).slider('disable');
+			else{
+				$(this).slider('enable');
+				if(this.value == 'no' && window.localStorage["superlist_listid"] ==_pid){
+					window.localStorage["superlist_listid"] = '';
+					$listBtn = $('.listBtn');
+					$listBtn.html('Mis Listas');					
+				}
+			}	
+		});
+			
+	});	
+}
+
+function updateUserPlaceAjax(_pid){	
+	$.ajax({
+		url: baseUrl + "/controllers/usuario_lugar.php",
+		dataType: "json",
+		data: {
+		    type: 'editplace',
+		    pid: _pid
+		},
+		success: function(response){
+			if(!response)
+				alert('error');
+			else
+				displayListBtn(true);
+		},
+		error: function(xhr, status, error){
+			alert('usuario_lugar actualizar: ' + status + ' ' + error);
+		}
+	});	
+}
+
+function chooseList(obj,id,name){
+	window.localStorage["superlist_listid"] = id;
+	$('#'+obj).popup('close');
+	$listBtn = $('.listBtn');
+	$listBtn.html('Mis Listas ('+name+')');
+	
+    if($.mobile.activePage.is('#shoppinglist'))
+    	loadShoppingList($('#items'));
+}
+
+function loadLists(){
+	var userid = window.localStorage["superlist_userid"];
+	$.ajax({
+		url: baseUrl + "/controllers/usuario_lugar.php",
+		dataType: "json",
+		data: {
+		    type: 'userlist',
+		    uid: userid
+		},
+		success: function ( response ) {
+			if(response.status == 'ok'){
+				if(response.user_places.length > 0){
+					$('#addNewList').hide();
+					$('#my_lists').show();						
+					$('#my_lists').html('');
+		    		for(i = 0; i < response.user_places.length; i++){
+		    			var user_place = response.user_places[i];
+		    			if(user_place.ownerid == userid || (user_place.ownerid != userid && user_place.activo)){
+			    			var input = '<div data-role="fieldcontain">'+
+								(user_place.ownerid == userid ? '<select class="profileListItem" name="flip-3-'+i+'" id="flip-3-'+i+'" data-role="slider" data-theme="c" onchange="updateUserPlace(this,'+user_place.lugarid+')">'+
+									'<option value="no" '+ (!user_place.activo ? 'selected="selected"' : '') + '>No</option>'+
+									'<option value="yes"'+ (user_place.activo ? 'selected="selected"' : '') + '>Si</option>'+
+								'</select>' : '') +
+								'<label class="userPlaceTitle" for="flip-3">'+user_place.nombreLugar + (user_place.ownerid == userid ? ' ('+user_place.key+')' : '') + '</label>'+
+							'</div>';
+							$('#my_lists').append(input);
+						}
+					}
+					disableSingleListItem();
+					$('div[data-role="fieldcontain"]').trigger('create');
+				}
+				else {
+					$('#addNewList').show();
+					$('#my_lists').hide();									
+				}
+			}
+		},
+		error: function(xhr, status, error){
+			alert('usuario_lugar: ' + status + ' ' + error);
+		}
+	});
 }
 
 function loadCategories(){	
@@ -360,10 +515,10 @@ function unbuy(obj){
 }
 
 function buyList(){
-	var _ids = $('#list').find('li[data-status="bought"]').map(function(){ return $(this).attr('data-id'); });
+	var _ids = $('#shoppinglist').find('li[data-status="bought"]').map(function(){ return $(this).attr('data-id'); });
 	$.ajax({
 		url: baseUrl + '/controllers/productos.php',
-		data: { ids: _ids.get(), lid: lugar, type: 'compra' },
+		data: { ids: _ids.get(), lid: window.localStorage["superlist_listid"], type: 'compra' },
 		dataType: 'json',
 		type: 'get',
 		success:  function(data){

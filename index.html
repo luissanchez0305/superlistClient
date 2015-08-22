@@ -13,6 +13,7 @@
 		<link rel="shortcut icon" href="favicon.ico">
     </head>
     <body>
+    <input type="hidden" id="backNavigation" />
 	<div data-role="page" data-theme="a" id="signin">
 		<div data-role="header" data-position="fixed">
 			<h1>Super List</h1>
@@ -26,8 +27,8 @@
 				<label for="name">Contraseña:</label>
 				<input type="password" name="signinPassword" id="signinPassword" value="goingup"  />
 			</div>	
-			<a href="#" id="signinBtn" data-role="button" data-theme="d" data-icon="check">Ingresar</a>	
-			<a href="#signup" data-role="button" data-theme="f">Registrarse</a>	
+			<a href="#" id="signinBtn" data-role="button" data-theme="d" data-icon="check" data-inline="true">Ingresar</a>	
+			<a href="#signup" data-role="button" data-theme="f" data-inline="true">Registrarse</a>	
 			<div id="signinloading" style="width: 100%; display:none;"><img width="50" height="50" src="images/ajax-loader1.gif" /></div>
 		</div>
 		<div data-role="footer" id="ftrMain" name="ftrMain" data-position="fixed">	
@@ -49,30 +50,35 @@
 			<div id="profile">
 				<form id="signupForm">			
 					<div data-role="fieldcontain">
-						<label for="name">Nombre:</label>
-						<input type="text" name="registerName" id="registerName" value=""  />
+						<input type="text" name="registerName" id="registerName" value="" placeholder="Nombre"  />
 					</div>					
 					<div data-role="fieldcontain">
-						<label for="name">Apellido:</label>
-						<input type="text" name="registerLastname" id="registerLastname" value=""  />
+						<input type="text" name="registerLastname" id="registerLastname" value="" placeholder="Apellido" />
 					</div>					
 					<div data-role="fieldcontain">
-						<label for="name">Email:</label>
-						<input type="text" name="registerEmail" id="registerEmail" value=""  />
+						<input type="text" name="registerEmail" id="registerEmail" value="" placeholder="email" />
 					</div>			
 					<div data-role="fieldcontain">
-						<label for="name">Contraseña:</label>
-						<input type="password" name="registerPassword" id="registerPassword" value=""  />
+						<input type="password" name="registerPassword" id="registerPassword" value="" placeholder="Password" />
 					</div>	
 				</form>	
-				<a href="#" data-role="button" id="signupBtn" data-theme="f">Registrarse</a>	
-				<a href="#signin" id="signinBackBtn" data-role="button" data-theme="d" data-icon="check">Ingresar</a>
+				<a href="#" data-role="button" id="signupBtn" data-theme="f" data-inline="true">Registrarse</a>	
+				<a href="#signin" id="signinBackBtn" data-role="button" data-theme="d" data-icon="check" data-inline="true">Ingresar</a>
+				<a id="cancelBackBtn" class="cancelBack" data-role="button" data-theme="d" data-icon="back" data-inline="true" style="display:none;">Cancelar</a>
 				<div id="registerloading" style="width: 100%; display:none;"><img width="50" height="50" src="images/ajax-loader1.gif" /></div>
 			</div>	
 			<div id="profileLists">
 			<!--TODO: AGREGAR LUGAR A MI PERFIL-->
+				<form id="addNewList">			
+					<div data-role="fieldcontain">
+						<input type="text" name="listName" id="listName" value="" placeholder="Nombre" />
+					</div>		
+					<a href="#" data-role="button" id="addNewListBtn" data-theme="f" data-inline="true">Guardar</a>
+					<a href="#" data-role="button" id="cancelNewListBtn" data-theme="f" data-inline="true">Cancelar</a>
+				</form>				
 				<div id="my_lists"></div>
-			<!--TODO: CREAR LUGAR NUEVO Y AGREGARLO A MI PERFIL-->
+				<a href="#" data-role="button" id="displayNewListBtn" data-theme="f" data-inline="true">Crear nueva lista</a>
+				<a id="cancelListBackBtn" class="cancelBack" data-role="button" data-theme="d" data-icon="back" data-inline="true">Salir</a>
 			<!--TODO: BORRAR LISTA DE MI PERFIL. SI ES EL UNICO QUE TIENE ESE LUGAR BORRARLO DEL TODO -->
 			</div>
 		</div>
@@ -83,7 +89,7 @@
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
 				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
-				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
+				<li data-icon="grid"><a href="#shoppinglist">Lista de compras</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
 		</div>		
@@ -104,15 +110,21 @@
 		<div data-role="footer" id="ftrMain" name="ftrMain" data-position="fixed">	
 			<h4 style="float:right; display: inline-block; margin-right: 10px; font-weight: normal;">Esfera Soluciones &reg;</h4>
 		</div>	
+		<div data-role="popup" data-overlay-theme="a" id="popupMyLists" data-theme="b">
+			<ul data-role="listview" data-inset="true" style="min-width:210px;" class="mylists">
+				<li data-role="list-divider">Escoja una de las listas</li>
+			</ul>
+		</div>		
 		<div data-role="panel" data-position="right" id="right-panel-index">			
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="user"><a href="#popupMyLists" data-rel="popup" data-position-to="window" data-transition="slideup" class="listBtn hide">Mis Listas</a></li>
 				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
-				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
+				<li data-icon="grid"><a href="#shoppinglist">Lista de compras</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
-		</div>
+		</div>		
 	</div>
 	<div data-role="page" data-theme="a" id="categories">
 		<div data-role="header" data-position="inline">
@@ -165,13 +177,19 @@
 		</div>	
 		<div data-role="footer" id="ftrMain" name="ftrMain" data-position="fixed">	
 			<h4 style="float:right; display: inline-block; margin-right: 10px; font-weight: normal;">Esfera Soluciones &reg;</h4>
-		</div>			
+		</div>		
+		<div data-role="popup" data-overlay-theme="a" id="popupMyListsProducts" data-theme="b">
+			<ul data-role="listview" data-inset="true" style="min-width:210px;" class="mylists">
+				<li data-role="list-divider">Escoja una de las listas</li>
+			</ul>
+		</div>		
 		<div data-role="panel" data-position="right" id="right-panel-products">			
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="user"><a class="listBtn hide" href="#popupMyListsProducts" data-rel="popup" data-position-to="window" data-transition="slideup">Mis Listas</a></li>
 				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
-				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
+				<li data-icon="grid"><a href="#shoppinglist">Lista de compras</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
 		</div>
@@ -250,17 +268,23 @@
 				</div>
 			</div>	
 		</div>	
+		<div data-role="popup" data-overlay-theme="a" id="popupMyListsProduct" data-theme="b">
+			<ul data-role="listview" data-inset="true" style="min-width:210px;" class="mylists">
+				<li data-role="list-divider">Escoja una de las listas</li>
+			</ul>
+		</div>	
 		<div data-role="panel" data-position="right" id="right-panel-product">			
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="user"><a class="listBtn hide" href="#popupMyListsProduct" data-rel="popup" data-position-to="window" data-transition="slideup">Mis Listas</a></li>
 				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
-				<li data-icon="grid"><a href="#list">Lista de compras</a></li>
+				<li data-icon="grid"><a href="#shoppinglist">Lista de compras</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
 			</ul>
 		</div>			
 	</div>	
-	<div data-role="page" data-theme="a" id="list">
+	<div data-role="page" data-theme="a" id="shoppinglist">
 		<div data-role="header" data-position="inline" data-position="fixed">
 			<h1>Mi Super List</h1>
 			<a href="#right-panel-list" class="ui-btn ui-shadow ui-corner-all ui-btn-right ui-icon-menu ui-btn-icon-notext" data-iconpos="notext" id="menuPanel">Menu</a>
@@ -269,10 +293,16 @@
 				<ul data-role="listview" data-inset="true" data-shadow="false" id="items">
 				</ul>
 		</div>	
+		<div data-role="popup" data-overlay-theme="a" id="popupMyListsShoppingList" data-theme="b">
+			<ul data-role="listview" data-inset="true" style="min-width:210px;" Class="mylists">
+				<li data-role="list-divider">Escoja una de las listas</li>
+			</ul>
+		</div>	
 		<div data-role="panel" data-position="right" id="right-panel-list">			
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-icon="delete"><a href="#my-header" data-rel="close">&nbsp;</a></li>
 				<li data-icon="user"><a href="#" onclick="app.profile();">Perfil</a></li>
+				<li data-icon="user"><a class="listBtn hide" href="#popupMyListsShoppingList" data-rel="popup" data-position-to="window" data-transition="slideup">Mis Listas</a></li>
 				<li data-icon="clipboard"><a href="#categories">Categorias</a></li>
 				<li data-icon="plus"><a href="#index">Que te hace falta?</a></li>
 				<li data-icon="delete"><a href="#" onclick="app.logout();">Salir</a></li>
@@ -284,7 +314,7 @@
 		</div>
 		<div data-role="popup" id="buyPopup">
 			<p>Su compra ha sido realizada</p>
-		</div>$('#profileLists')
+		</div>
 	</div>
 
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -299,34 +329,44 @@
 			$('#popupSuccess').hide();
 		    $('#profileControl').hide();
 		    $('#profileLists').hide();
-			loadList($('#items'));
-			loadCategories();
+			
+			// desplegar para crear nueva lista
+			$('#displayNewListBtn').click(function(){
+				$('#addNewList').show();
+				$('#my_lists').hide();
+				$(this).hide();
+			});
+			
+			// esconder crear nueva lista
+			$('#cancelNewListBtn').click(function(){
+				$('#addNewList').hide();
+				$('#my_lists').show();
+				$('#displayNewListBtn').show();
+			});
+			
+			// boton de crear nueva lista 
+			$('#addNewListBtn').click(function(){
+				$.ajax({
+			            url: baseUrl + "/controllers/usuario_lugar.php",
+			            dataType: "json",
+			            data: {
+			                type: 'adduserlist',
+			                uid: window.localStorage["superlist_userid"],
+			                n: $('#listName').val()
+			            },	
+		                success: function ( response ) {
+		                	loadLists();
+		                },
+		                error: function (xhr, status, error){
+		                	alert('agregar usuario_lugar: ' + status + ' ' + error);
+		                }			
+				});
+			});
 			
 			// control de la info del usuario y listas en perfil
 			$('input[name="radio-choice-h-2"]').click(function(){
 				if($('#profile').is(':visible')){
-					$.ajax({
-		                url: baseUrl + "/controllers/usuario_lugar.php",
-		                dataType: "json",
-		                data: {
-		                    type: 'userlist',
-		                    uid: window.localStorage["superlist_userid"]
-		                },
-		                success: function ( response ) {
-		                	if(response.status == 'ok'){
-		                		for(i = 0; i < response.user_places.length; i++){
-		                			var user_place = response.user_places[i];
-			                		var input = '<input style="margin-top:20px;" type="checkbox" name="userPlace[]" id="checkbox-v-'+i+'" value="'+user_place.lugarid+'">'
-			                 			+ '<label for="checkbox-v-'+i+'">'+user_place.nombreLugar+'</label>';
-									$('#my_lists').html('');
-									$('#my_lists').append(input);
-								}
-		                	}
-		                },
-						error: function(xhr, status, error){
-							alert('usuario_lugar: ' + status + ' ' + error);
-						}
-					});
+					loadLists();
 					$('#profileLists').show();
 					$('#profile').hide();					
 				}
@@ -334,10 +374,19 @@
 					$('#profileLists').hide();
 					$('#profile').show();					
 				}
-			});			
+			});		
+			
+			$(document).on('click', '.cancelBack', function(){
+	        	$.mobile.changePage("#" + $('#backNavigation').val());				
+			});
+			
+			$(document).on('pageshow', 'div[data-role="page"]', function(){
+				if($(this).attr('id') != 'signup')
+					$('#backNavigation').val($(this).attr('id'));
+			});
 			
 			// crear el autocomplete de nombre de productos
-		    $( "#productNameAutocomplete" ).on( "filterablebeforefilter", function ( e, data ) {
+		    $( "#productNameAutocomplete" ).on("filterablebeforefilter", function ( e, data ) {
 		        var $ul = $( this ),
 		            $input = $( data.input ),
 		            value = $input.val(),
@@ -496,7 +545,7 @@
 				$('#backToProducts').attr('data-id', $this.attr('data-id'));
 				$.ajax({
 					url: baseUrl + '/controllers/productos.php',
-					data: { id: $this.attr('data-id'), lid: lugar, type: 'productos' },
+					data: { id: $this.attr('data-id'), lid: window.localStorage["superlist_listid"], type: 'productos' },
 					type: 'get',
 					dataType: 'json',
 					success: function(data){
@@ -538,7 +587,7 @@
 					$('#product .work-in .info').show();
 					$.ajax({
 						url: baseUrl + '/controllers/productos.php',
-						data: { id: $this.attr('data-id'), lid: lugar, type: 'producto' },
+						data: { id: $this.attr('data-id'), lid: window.localStorage["superlist_listid"], type: 'producto' },
 						type: 'get',
 						dataType: 'json',
 						success: function(data){
@@ -590,7 +639,7 @@
         				$('#productId').val($this.attr('data-id'));	
 						$.ajax({
 							url: baseUrl + '/controllers/productos.php',
-							data: { id: $this.attr('data-id'), lid: lugar, type: 'producto' },
+							data: { id: $this.attr('data-id'), lid: window.localStorage["superlist_listid"], type: 'producto' },
 							type: 'get',
 							dataType: 'json',
 							success: function(data){
@@ -606,8 +655,8 @@
         			}
 				}
 			}
-			else if(view == 'list'){
-				loadList($('#items'));
+			else if(view == 'shoppinglist'){
+				loadShoppingList($('#items'));
 			}
 			else if(view == 'categories'){
 				$.ajax({
@@ -635,6 +684,23 @@
 						alert('categories: '+ status + ' ' + error);
 					}
 				});
+			}
+			else if(view == 'popupMyLists' || view == 'popupMyListsProducts' || view == 'popupMyListsProduct' || view == 'popupMyListsShoppingList'){
+				getActivatedLists(function(data){
+					$ul = $('#'+view+' .mylists');
+			        $ul.html( '<li data-role="list-divider">Escoja una de las listas</li>' );
+			        $ul.listview( "refresh" );
+			           
+					var html = '';
+					$('.listItem').remove();
+					$.each(data, function(i, lista){
+						activeList = window.localStorage["superlist_listid"];
+						html += '<li class="listItem"><a href="#" onclick="chooseList(\''+view+'\','+lista.id+',\''+lista.nombre+'\')" class="ui-btn '+ (activeList == lista.id ? 'ui-icon-carat-l ui-btn-icon-right' : '') + '">'+lista.nombre+'</a></li>';		
+					});
+					$ul.append(html);
+				    $ul.listview( "refresh" );
+				    $ul.trigger( "updatelayout");						
+				});			
 			}
 		});
 	</script>
