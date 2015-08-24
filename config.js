@@ -3,4 +3,4 @@
  */
 
 var lugar = 1;
-var baseUrl = 'http://localhost:8087';
+var baseUrl = 'http://superlist.esferasoluciones.com';
