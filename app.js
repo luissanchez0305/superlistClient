@@ -409,6 +409,10 @@ function chooseList(obj,id,name){
 	
     if($.mobile.activePage.is('#shoppinglist'))
     	loadShoppingList($('#items'));
+    else if($.mobile.activePage.is('#products'))
+    	loadProducts(id);
+    else if($.mobile.activePage.is('#product'))
+		loadProduct(id);
 }
 
 function loadLists(){
@@ -484,6 +488,114 @@ function loadCategories(){
 			}
 		});
 	}
+}
+
+function loadProducts(_lid){
+	$.ajax({
+		url: baseUrl + '/controllers/productos.php',
+		data: { id: $('#backToProducts').attr('data-id'), lid: _lid, type: 'productos' },
+		type: 'get',
+		dataType: 'json',
+		success: function(data){
+			$('#products .content .content-grid').remove();
+			var count = data.length;
+			if(count > 0)
+				$.each(data, function(i, producto){
+					$('#products .content').append(
+						'<div class="content-grid">'+
+							'<a href="#product" class="b-link-stripe b-animate-go thickbox" data-id="'+producto.id+'">'+
+								'<img  src="'+baseUrl+producto.imagen+'" style="width:74%;height:74%; display:block; margin: auto;"/>'+
+							'</a>'+
+							'<div class="valueControllers">'+
+								'<label style="padding-top:11px; padding-left: 5px; float:left; font-weight: bold; color: #3388cc;">' + producto.nombre + '</label>'+
+		    					'<a style="float:right;" class="mngQty ui-shadow ui-btn ui-corner-all ui-icon-plus ui-btn-icon-notext ui-btn-inline">Button</a>'+
+		    					'<label class="quantity" style="width: 10px; float:right;	padding-top: 15px; padding-right: 8px;">'+producto.cantidad+'</label>'+
+		    					'<a style="float:right;" class="mngQty ui-shadow ui-btn ui-corner-all ui-icon-minus ui-btn-icon-notext ui-btn-inline">Button</a>'+
+							'</div>'+
+						'</div>'
+					);							
+					if(!--count){
+						appendAddProduct($('#products .content'));																
+					}
+				});
+			else
+				appendAddProduct($('#products .content'));								
+		},
+		error: function(xhr, status, error){
+			alert('productos: ' + status + ' ' + error);
+		}
+	});	
+}
+
+function loadProduct(_lid){
+	if($('#productId').val() != '0' && $('#currentAction').val() != 'editar'){
+		$('.addData').hide();
+		$('#product .work-top.work-product').show();
+		$('#product .work-top.work-add').hide();
+		$('#product .work-in .info').show();
+		$.ajax({
+			url: baseUrl + '/controllers/productos.php',
+			data: { id: $('#productId').val(), lid: _lid, type: 'producto' },
+			type: 'get',
+			dataType: 'json',
+			success: function(data){
+				$('#productImage').attr('src', '');
+				$('#productBrand').html('');
+				$('#lastDate').html('');
+				$('#lastQty').html('');
+				$('#productQty').html('');
+							
+				$('#productImage').attr('src', baseUrl + data.imagen);
+				$('#productBrand').html(data.marca);
+				if(data.ultimaFecha){
+					$('#lastDate').html('Fue el ' + data.ultimaFecha);
+					$('#lastQty').html('Compró ' + data.ultimaCantidad + ' unidad' + (data.ultimaCantidad > 1 ? 'es' : ''));
+				}
+				else{					
+					$('#lastDate').html('Nunca lo ha comprado antes');	
+					$('#lastQty').html('');
+				}
+				
+				$('#productQty').html(data.cantidad);
+			},
+			error: function(xhr, status, error){
+				alert('producto: ' + status + ' ' + error);
+			}
+			
+		});
+	}
+	else{	
+		$('.addData').show();
+		$('#product .work-top.work-product').hide();
+		$('#product .work-top.work-add').show();
+		$('#product .work-in .info').hide();					
+    	$('#camera-image').attr('src','');
+    	$('#imageName').val('');
+    	$('#currentState').html('');
+		$('#addProductName').val('');
+		$('#addBrandName').val('');
+		$('#product').find('input[placeholder="Producto"]').val('');
+		// editar producto
+    	if($('#productId').val() != '0' && $('#currentAction').val() == 'editar'){    
+			$('#productName, .productTitle').html('Editar un producto');
+    		$('#currentAction').val('editar');  
+			$.ajax({
+				url: baseUrl + '/controllers/productos.php',
+				data: { id: $('#productId').val(), lid: _lid, type: 'producto' },
+				type: 'get',
+				dataType: 'json',
+				success: function(data){
+					$('#camera-image').attr('src', baseUrl + data.imagen);
+					$('#imageName').val(data.imagen.substring(data.imagen.lastIndexOf('/')));
+					$('#addProductName').val(data.id);
+					$('#product').find('input[placeholder="Producto"]').val(data.nombre);
+				},
+				error: function(xhr, status, error){
+					alert('edit product: ' + status + ' ' + error);
+				}
+			});
+    	}
+	}	
 }
 
 function appendAddProduct($obj){			

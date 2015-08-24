@@ -541,119 +541,33 @@
 			var $this = $(this);
 			var view = $this.attr('href') ? $this.attr('href').replace('#','') : $this.attr('action') ? $this.attr('action') : '';
 			if(view == 'products'){
-				$('#categoryName').html($this.find('.categoryName').html());
-				$('#backToProducts').attr('data-id', $this.attr('data-id'));
-				$.ajax({
-					url: baseUrl + '/controllers/productos.php',
-					data: { id: $this.attr('data-id'), lid: window.localStorage["superlist_listid"], type: 'productos' },
-					type: 'get',
-					dataType: 'json',
-					success: function(data){
-						$('#products .content .content-grid').remove();
-						var count = data.length;
-						if(count > 0)
-							$.each(data, function(i, producto){
-								$('#products .content').append(
-									'<div class="content-grid">'+
-										'<a href="#product" class="b-link-stripe b-animate-go thickbox" data-id="'+producto.id+'">'+
-											'<img  src="'+baseUrl+producto.imagen+'" style="width:74%;height:74%; display:block; margin: auto;"/>'+
-										'</a>'+
-										'<div class="valueControllers">'+
-											'<label style="padding-top:11px; padding-left: 5px; float:left; font-weight: bold; color: #3388cc;">' + producto.nombre + '</label>'+
-					    					'<a style="float:right;" class="mngQty ui-shadow ui-btn ui-corner-all ui-icon-plus ui-btn-icon-notext ui-btn-inline">Button</a>'+
-					    					'<label class="quantity" style="width: 10px; float:right;	padding-top: 15px; padding-right: 8px;">'+producto.cantidad+'</label>'+
-					    					'<a style="float:right;" class="mngQty ui-shadow ui-btn ui-corner-all ui-icon-minus ui-btn-icon-notext ui-btn-inline">Button</a>'+
-										'</div>'+
-									'</div>'
-								);							
-								if(!--count){
-									appendAddProduct($('#products .content'));																
-								}
-							});
-						else
-							appendAddProduct($('#products .content'));								
-					},
-					error: function(xhr, status, error){
-						alert('productos: ' + status + ' ' + error);
-					}
-				});
+				var _lid = window.localStorage["superlist_listid"];
+				if(typeof _lid === 'undefined' || _lid.length == 0){					
+					$.mobile.activePage.find('.listBtn').click();
+				}
+				else {
+					$('#categoryName').html($this.find('.categoryName').html());
+					$('#backToProducts').attr('data-id', $this.attr('data-id'));
+					loadProducts(_lid);
+				}					
 			}
 			else if(view == 'product' || view == 'edit'){
+				$('#productId').val($this.attr('data-id'));
 				if($this.attr('data-id') != '0' && view != 'edit'){
-					$('.addData').hide();
+					$('#editProduct').attr('data-id', $this.attr('data-id'));
 					$('#productName, .productTitle').html($this.next().find('label')[0].innerHTML);
-					$('#product .work-top.work-product').show();
-					$('#product .work-top.work-add').hide();
-					$('#product .work-in .info').show();
-					$.ajax({
-						url: baseUrl + '/controllers/productos.php',
-						data: { id: $this.attr('data-id'), lid: window.localStorage["superlist_listid"], type: 'producto' },
-						type: 'get',
-						dataType: 'json',
-						success: function(data){
-							$('#editProduct').attr('data-id', data.id);
-							$('#productId').val(data.id);
-							$('#productImage').attr('src', '');
-							$('#productBrand').html('');
-							$('#lastDate').html('');
-							$('#lastQty').html('');
-							$('#productQty').html('');
-							
-							$('#productImage').attr('src', baseUrl + data.imagen);
-							$('#productBrand').html(data.marca);
-							if(data.ultimaFecha){
-								$('#lastDate').html('Fue el ' + data.ultimaFecha);
-								$('#lastQty').html('Compró ' + data.ultimaCantidad + ' unidad' + (data.ultimaCantidad > 1 ? 'es' : ''));
-							}
-							else{					
-								$('#lastDate').html('Nunca lo ha comprado antes');	
-								$('#lastQty').html('');
-							}
-							
-							$('#productQty').html(data.cantidad);
-						},
-						error: function(xhr, status, error){
-							alert('producto: ' + status + ' ' + error);
-						}
-						
-					});
+    				$('#currentAction').val('desplegar');
 				}
-				else{	
-					$('.addData').show();
-					$('#productName, .productTitle').html('Agrega un producto');				
-					$('#product .work-top.work-product').hide();
-					$('#product .work-top.work-add').show();
-					$('#product .work-in .info').hide();					
-        			$('#camera-image').attr('src','');
-        			$('#imageName').val('');
-        			$('#currentState').html('');
-					$('#addProductName').val('');
-					$('#addBrandName').val('');
-					$('#product').find('input[placeholder="Producto"]').val('');
-					$('#productId').val('0');
-        			$('#currentAction').val('agregar');    				
-					// editar producto
-        			if($this.attr('data-id') != '0' && view == 'edit'){    
-						$('#productName, .productTitle').html('Editar un producto');
-        				$('#currentAction').val('editar');  
-        				$('#productId').val($this.attr('data-id'));	
-						$.ajax({
-							url: baseUrl + '/controllers/productos.php',
-							data: { id: $this.attr('data-id'), lid: window.localStorage["superlist_listid"], type: 'producto' },
-							type: 'get',
-							dataType: 'json',
-							success: function(data){
-								$('#camera-image').attr('src', baseUrl + data.imagen);
-								$('#imageName').val(data.imagen.substring(data.imagen.lastIndexOf('/')));
-								$('#addProductName').val(data.id);
-								$('#product').find('input[placeholder="Producto"]').val(data.nombre);
-							},
-							error: function(xhr, status, error){
-								alert('edit product: ' + status + ' ' + error);
-							}
-						});
-        			}
-				}
+				else{
+					$('#productName, .productTitle').html('Agrega un producto');
+    				$('#currentAction').val('agregar');   
+					$('#productId').val('0'); 				
+					if($this.attr('data-id') != '0' && view == 'edit'){
+						$('#productId').val($this.attr('data-id'));
+    					$('#currentAction').val('editar');
+					}    
+				}	
+				loadProduct(window.localStorage["superlist_listid"]);
 			}
 			else if(view == 'shoppinglist'){
 				loadShoppingList($('#items'));
