@@ -68,16 +68,24 @@
 				<div id="registerloading" style="width: 100%; display:none;"><img width="50" height="50" src="images/ajax-loader1.gif" /></div>
 			</div>	
 			<div id="profileLists">
-			<!--TODO: AGREGAR LUGAR A MI PERFIL-->
-				<form id="addNewList">			
+				<form id="addNewList" style="display:none;">			
 					<div data-role="fieldcontain">
-						<input type="text" name="listName" id="listName" value="" placeholder="Nombre" />
+						<input type="text" name="newListName" id="newListName" value="" placeholder="Nombre" />
 					</div>		
 					<a href="#" data-role="button" id="addNewListBtn" data-theme="f" data-inline="true">Guardar</a>
 					<a href="#" data-role="button" id="cancelNewListBtn" data-theme="f" data-inline="true">Cancelar</a>
-				</form>				
+				</form>			
+				<form id="addExistingList" style="display:none;">			
+					<div data-role="fieldcontain">
+						<input type="text" name="listKey" id="listKey" value="" placeholder="Codigo de lista" />
+					</div>		
+					<a href="#" data-role="button" id="addExistingListBtn" data-theme="f" data-inline="true">Guardar</a>
+					<a href="#" data-role="button" id="cancelAddListBtn" data-theme="f" data-inline="true">Cancelar</a>
+					<label id="listManageResponseStatus"></label>
+				</form>			
 				<div id="my_lists"></div>
-				<a href="#" data-role="button" id="displayNewListBtn" data-theme="f" data-inline="true">Crear nueva lista</a>
+				<a href="#" data-role="button" id="displayNewListBtn" data-theme="f" data-inline="true">Crear lista</a>
+				<a href="#" data-role="button" id="displayAddListBtn" data-theme="f" data-inline="true">Agregar lista</a>
 				<a id="cancelListBackBtn" class="cancelBack" data-role="button" data-theme="d" data-icon="back" data-inline="true">Salir</a>
 			<!--TODO: BORRAR LISTA DE MI PERFIL. SI ES EL UNICO QUE TIENE ESE LUGAR BORRARLO DEL TODO -->
 			</div>
@@ -332,16 +340,32 @@
 			
 			// desplegar para crear nueva lista
 			$('#displayNewListBtn').click(function(){
+				$('#displayAddListBtn').hide();
+				$('#cancelListBackBtn').hide();
 				$('#addNewList').show();
+				$('#addExistingList').hide();
 				$('#my_lists').hide();
 				$(this).hide();
 			});
 			
-			// esconder crear nueva lista
-			$('#cancelNewListBtn').click(function(){
+			// desplegar para agregar lista
+			$('#displayAddListBtn').click(function(){
+				$('#displayNewListBtn').hide();
+				$('#cancelListBackBtn').hide();
+				$('#addExistingList').show();
+				$('#addNewList').hide();
+				$('#my_lists').hide();
+				$(this).hide();				
+			});
+			
+			// esconder crear nueva y agregar lista
+			$('#cancelNewListBtn, #cancelAddListBtn').click(function(){
+				$('#addExistingList').hide();
 				$('#addNewList').hide();
 				$('#my_lists').show();
 				$('#displayNewListBtn').show();
+				$('#displayAddListBtn').show();
+				$('#cancelListBackBtn').show();
 			});
 			
 			// boton de crear nueva lista 
@@ -356,6 +380,32 @@
 			            },	
 		                success: function ( response ) {
 		                	loadLists();
+		                },
+		                error: function (xhr, status, error){
+		                	alert('agregar usuario_lugar: ' + status + ' ' + error);
+		                }			
+				});
+			});
+			
+			// boton de crear nueva lista 
+			$('#addExistingListBtn').click(function(){
+				$.ajax({
+			            url: baseUrl + "/controllers/usuario_lugar.php",
+			            dataType: "json",
+			            data: {
+			                type: 'addlisttouser',
+			                uid: window.localStorage["superlist_userid"],
+			                k: $('#listKey').val()
+			            },	
+		                success: function ( data ) {
+		                	if(data.response == 'success')
+		                		loadLists();
+		                	else if(data.response == 'fail')
+		                		$('#listManageResponseStatus').html('El código no concuerda con ninguna lista');
+		                	else if(data.response == 'already')
+		                		$('#listManageResponseStatus').html('Ya tienes esta lista');
+		                	
+		                	setTimeout(function(){ $('#listManageResponseStatus').html(''); }, 5000);
 		                },
 		                error: function (xhr, status, error){
 		                	alert('agregar usuario_lugar: ' + status + ' ' + error);

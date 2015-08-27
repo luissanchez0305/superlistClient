@@ -193,6 +193,8 @@ var app = {
 		$('#registerPassword').val('');
 		$('#registerName').val('');
 		$('#registerLastname').val('');
+		$('#profileLists').hide();
+		$('#profile').show();	
 		changeDisplay(false);
     }
 };
@@ -217,7 +219,7 @@ function modifyCategories(add, id){
 		url: baseUrl + '/controllers/categoria.php',
 		data: { category: id, id: window.localStorage["superlist_userid"], type: add ? 'add' : 'delete' },
 		type: "get",
-		success: function (data){ loadCategories(); /*modifyCategoriesResult(data.success);*/ },
+		success: function (data){ loadCategories(); },
 		error: function(xhr, status, error){
 			alert('Categories update: ' + status + ' ' + error);
 		}
@@ -366,10 +368,13 @@ function updateUserPlace(obj,_pid){
 function disableSingleListItem(_pid){	
 	getActivatedLists(function(data){
 		$('.profileListItem').each(function(){
+			$this = $(this);
 			if(data.length == 1 && this.value == 'yes')
-				$(this).slider('disable');
+				$this.slider('disable');
 			else{
-				$(this).slider('enable');
+				attr = $this.attr('disabled');
+				if(typeof attr === typeof undefined)
+					$this.slider('enable');
 				if(this.value == 'no' && window.localStorage["superlist_listid"] ==_pid){
 					window.localStorage["superlist_listid"] = '';
 					$listBtn = $('.listBtn');
@@ -428,16 +433,20 @@ function loadLists(){
 			if(response.status == 'ok'){
 				if(response.user_places.length > 0){
 					$('#addNewList').hide();
+					$('#addExistingList').hide();
+					$('#displayNewListBtn').show();
+					$('#displayAddListBtn').show();
+					$('#cancelListBackBtn').show();
 					$('#my_lists').show();						
 					$('#my_lists').html('');
 		    		for(i = 0; i < response.user_places.length; i++){
 		    			var user_place = response.user_places[i];
 		    			if(user_place.ownerid == userid || (user_place.ownerid != userid && user_place.activo)){
 			    			var input = '<div data-role="fieldcontain">'+
-								(user_place.ownerid == userid ? '<select class="profileListItem" name="flip-3-'+i+'" id="flip-3-'+i+'" data-role="slider" data-theme="c" onchange="updateUserPlace(this,'+user_place.lugarid+')">'+
+								'<select class="profileListItem" name="flip-3-'+i+'" id="flip-3-'+i+'" data-role="slider" data-theme="c" onchange="updateUserPlace(this,'+user_place.lugarid+')"' + (user_place.ownerid == userid ? '' : ' disabled="disabled"') + '>'+
 									'<option value="no" '+ (!user_place.activo ? 'selected="selected"' : '') + '>No</option>'+
 									'<option value="yes"'+ (user_place.activo ? 'selected="selected"' : '') + '>Si</option>'+
-								'</select>' : '') +
+								'</select>' +
 								'<label class="userPlaceTitle" for="flip-3">'+user_place.nombreLugar + (user_place.ownerid == userid ? ' ('+user_place.key+')' : '') + '</label>'+
 							'</div>';
 							$('#my_lists').append(input);
