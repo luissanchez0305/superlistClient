@@ -4,7 +4,7 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.esfera.superlist"
-        version   = "1.1.0">
+        version   = "1.2.0">
 
     <name>Super List</name>
 
@@ -33,31 +33,31 @@
 
     <!-- Define app icon for each platform. -->
     <icon src="images/icon.png" />
-    <icon src="images/icon.png"   	gap:platform="android"    gap:density="ldpi" />
-    <icon src="images/icon.png"   	gap:platform="android"    gap:density="mdpi" />
-    <icon src="images/icon.png"   	gap:platform="android"    gap:density="hdpi" />
-    <icon src="images/icon.png"  	gap:platform="android"    gap:density="xhdpi" />
+    <icon src="images/icon-ldpi.png"   	gap:platform="android"    gap:density="ldpi" />
+    <icon src="images/icon-mdpi.png"   	gap:platform="android"    gap:density="mdpi" />
+    <icon src="images/icon-hdpi.png"   	gap:platform="android"    gap:density="hdpi" />
+    <icon src="images/icon-xhdpi.png"  	gap:platform="android"    gap:density="xhdpi" />
     <icon src="images/icon.png"     gap:platform="blackberry" />
     <icon src="images/icon.png"     gap:platform="blackberry" gap:state="hover"/>
-    <icon src="images/icon.png"     gap:platform="ios"        width="57" height="57" />
-    <icon src="images/icon.png"     gap:platform="ios"        width="72" height="72" />
-    <icon src="images/icon.png"     gap:platform="ios"        width="114" height="114" />
-    <icon src="images/icon.png"     gap:platform="ios"        width="144" height="144" />
+    <icon src="images/ios-icon-l.png"     gap:platform="ios"        width="57" height="57" />
+    <icon src="images/ios-icon-m.png"     gap:platform="ios"        width="72" height="72" />
+    <icon src="images/ios-icon-h.png"     gap:platform="ios"        width="114" height="114" />
+    <icon src="images/ios-icon-xh.png"     gap:platform="ios"        width="144" height="144" />
     <icon src="images/icon.png"     gap:platform="webos" />
     <icon src="images/icon.png"  	gap:platform="winphone" />
     <icon src="images/icon.png"		gap:platform="winphone"   gap:role="background" />
 
     <!-- Define app splash screen for each platform. -->
-    <gap:splash src="images/introicon_ldpi.png"  	gap:platform="android" gap:density="ldpi" />
-    <gap:splash src="images/introicon_mdpipng"  	gap:platform="android" gap:density="mdpi" />
-    <gap:splash src="images/introicon_hdpi.png"  	gap:platform="android" gap:density="hdpi" />
-    <gap:splash src="images/introicon_xhdpi.png" 	gap:platform="android" gap:density="xhdpi" />
-    <gap:splash src="images/introicon_ldpi.png"     gap:platform="blackberry" />
-    <gap:splash src="images/introicon_ldpi.png"    	gap:platform="ios"     width="320" height="480" />
-    <gap:splash src="images/introicon_mdpi.png" 	gap:platform="ios"     width="640" height="960" />
-    <gap:splash src="images/introicon_hdpi.png"     gap:platform="ios"     width="768" height="1024" />
-    <gap:splash src="images/introicon_xhdpi.png"     gap:platform="ios"     width="1024" height="768" />
-    <gap:splash src="images/introicon_ldpi.png" 	gap:platform="winphone" />
+    <gap:splash src="images/introicon-ldpi.png"  	gap:platform="android" gap:density="ldpi" />
+    <gap:splash src="images/introicon-mdpipng"  	gap:platform="android" gap:density="mdpi" />
+    <gap:splash src="images/introicon-hdpi.png"  	gap:platform="android" gap:density="hdpi" />
+    <gap:splash src="images/introicon-xhdpi.png" 	gap:platform="android" gap:density="xhdpi" />
+    <gap:splash src="images/introicon-hdpi.png"     gap:platform="blackberry" />
+    <gap:splash src="images/introicon-ldpi.png"    	gap:platform="ios"     width="320" height="480" />
+    <gap:splash src="images/introicon-mdpi.png" 	gap:platform="ios"     width="640" height="960" />
+    <gap:splash src="images/introicon-hdpi.png"     gap:platform="ios"     width="768" height="1024" />
+    <gap:splash src="images/introicon-xhdpi.png"     gap:platform="ios"     width="1024" height="768" />
+    <gap:splash src="images/introicon-hdpi.png" 	gap:platform="winphone" />
 
     <!--
         Define access to external domains.
